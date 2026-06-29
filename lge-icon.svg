@@ -1,0 +1,206 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a1030"/>
+      <stop offset="100%" stop-color="#0a0812"/>
+    </radialGradient>
+
+    <!-- Layer gradients (bottom to top: deep → bright) -->
+    <linearGradient id="layer1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+    <linearGradient id="layer2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5b21b6"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="layer3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="layer4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#d946ef"/>
+    </linearGradient>
+
+    <!-- Top face gradients (lighter) -->
+    <linearGradient id="top1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="top2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="top3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <linearGradient id="top4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#e879f9"/>
+    </linearGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft glow for core -->
+    <filter id="coreGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Clip to circle -->
+    <clipPath id="circleClip">
+      <circle cx="256" cy="256" r="240"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="url(#bgGrad)"/>
+
+  <!-- Subtle outer ring -->
+  <circle cx="256" cy="256" r="238" fill="none" stroke="#7c3aed" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="256" cy="256" r="230" fill="none" stroke="#a855f7" stroke-width="0.5" opacity="0.15"/>
+
+  <!-- ============================================================ -->
+  <!-- ISOMETRIC LAYERED STACK — 4 floating platform layers         -->
+  <!-- Isometric projection: top rhombus + left face + right face  -->
+  <!-- Centered at x=256, stacked vertically                        -->
+  <!-- ============================================================ -->
+
+  <!-- === LAYER 1 (bottom, largest, darkest) === -->
+  <!-- Width: 200, Depth: 80 (isometric), Height: 28 -->
+  <!-- Right face -->
+  <polygon points="256,345  356,315  356,287  256,317" fill="#2e0a52" opacity="0.95"/>
+  <!-- Left face -->
+  <polygon points="256,345  156,315  156,287  256,317" fill="#3b0764" opacity="0.95"/>
+  <!-- Top face (rhombus) -->
+  <polygon points="256,317  356,287  256,257  156,287" fill="url(#top1)" opacity="0.95"/>
+  <!-- Top face highlight edge -->
+  <polyline points="156,287  256,257  356,287" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- === LAYER 2 === -->
+  <!-- Width: 165, slightly narrower, higher up -->
+  <!-- Right face -->
+  <polygon points="256,292  331,265  331,238  256,265" fill="#4c1087" opacity="0.95"/>
+  <!-- Left face -->
+  <polygon points="256,292  181,265  181,238  256,265" fill="#5b21b6" opacity="0.95"/>
+  <!-- Top face -->
+  <polygon points="256,265  331,238  256,211  181,238" fill="url(#top2)" opacity="0.95"/>
+  <!-- Top edge highlight -->
+  <polyline points="181,238  256,211  331,238" fill="none" stroke="#c084fc" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- === LAYER 3 === -->
+  <!-- Width: 130 -->
+  <!-- Right face -->
+  <polygon points="256,238  316,215  316,189  256,212" fill="#6d28d9" opacity="0.95"/>
+  <!-- Left face -->
+  <polygon points="256,238  196,215  196,189  256,212" fill="#7c3aed" opacity="0.95"/>
+  <!-- Top face -->
+  <polygon points="256,212  316,189  256,166  196,189" fill="url(#top3)" opacity="0.95"/>
+  <!-- Top edge highlight -->
+  <polyline points="196,189  256,166  316,189" fill="none" stroke="#d946ef" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- === LAYER 4 (top, smallest, brightest) === -->
+  <!-- Width: 95 -->
+  <!-- Right face -->
+  <polygon points="256,185  303,164  303,140  256,161" fill="#9333ea" opacity="0.95"/>
+  <!-- Left face -->
+  <polygon points="256,185  209,164  209,140  256,161" fill="#a855f7" opacity="0.95"/>
+  <!-- Top face -->
+  <polygon points="256,161  303,140  256,119  209,140" fill="url(#top4)" opacity="0.95"/>
+  <!-- Top edge highlight -->
+  <polyline points="209,140  256,119  303,140" fill="none" stroke="#f0abfc" stroke-width="2" opacity="0.8"/>
+
+  <!-- ============================================================ -->
+  <!-- CONNECTOR PILLARS — thin vertical lines linking layers       -->
+  <!-- ============================================================ -->
+  <!-- Left pillar -->
+  <line x1="156" y1="287" x2="181" y2="238" stroke="#7c3aed" stroke-width="1" opacity="0.4"/>
+  <line x1="181" y1="238" x2="196" y2="189" stroke="#a855f7" stroke-width="1" opacity="0.4"/>
+  <line x1="196" y1="189" x2="209" y2="140" stroke="#c084fc" stroke-width="1" opacity="0.4"/>
+  <!-- Right pillar -->
+  <line x1="356" y1="287" x2="331" y2="238" stroke="#7c3aed" stroke-width="1" opacity="0.4"/>
+  <line x1="331" y1="238" x2="316" y2="189" stroke="#a855f7" stroke-width="1" opacity="0.4"/>
+  <line x1="316" y1="189" x2="303" y2="140" stroke="#c084fc" stroke-width="1" opacity="0.4"/>
+
+  <!-- ============================================================ -->
+  <!-- NODE DOTS at connection points (neural-network vibe)         -->
+  <!-- ============================================================ -->
+  <!-- Bottom layer corners -->
+  <circle cx="156" cy="287" r="4" fill="#7c3aed" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="356" cy="287" r="4" fill="#7c3aed" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="256" cy="257" r="4" fill="#8b5cf6" filter="url(#glow)" opacity="0.9"/>
+  <!-- Layer 2 corners -->
+  <circle cx="181" cy="238" r="3.5" fill="#a855f7" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="331" cy="238" r="3.5" fill="#a855f7" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="256" cy="211" r="3.5" fill="#c084fc" filter="url(#glow)" opacity="0.9"/>
+  <!-- Layer 3 corners -->
+  <circle cx="196" cy="189" r="3" fill="#c084fc" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="316" cy="189" r="3" fill="#c084fc" filter="url(#glow)" opacity="0.9"/>
+  <circle cx="256" cy="166" r="3" fill="#d946ef" filter="url(#glow)" opacity="0.9"/>
+  <!-- Layer 4 corners (top, brightest) -->
+  <circle cx="209" cy="140" r="3" fill="#e879f9" filter="url(#glow)" opacity="1"/>
+  <circle cx="303" cy="140" r="3" fill="#e879f9" filter="url(#glow)" opacity="1"/>
+  <circle cx="256" cy="119" r="5" fill="#f0abfc" filter="url(#coreGlow)" opacity="1"/>
+
+  <!-- ============================================================ -->
+  <!-- APEX GLOW — bright energy point at the summit               -->
+  <!-- ============================================================ -->
+  <circle cx="256" cy="119" r="14" fill="#d946ef" opacity="0.15" filter="url(#coreGlow)"/>
+  <circle cx="256" cy="119" r="7" fill="#f0abfc" opacity="0.7" filter="url(#glow)"/>
+  <circle cx="256" cy="119" r="3" fill="#ffffff" opacity="0.95"/>
+
+  <!-- ============================================================ -->
+  <!-- LABEL — "LGE" at bottom                                     -->
+  <!-- ============================================================ -->
+  <text
+    x="256" y="420"
+    text-anchor="middle"
+    font-family="'SF Pro Display', 'Inter', 'Helvetica Neue', Arial, sans-serif"
+    font-size="52"
+    font-weight="800"
+    letter-spacing="10"
+    fill="none"
+    stroke="#7c3aed"
+    stroke-width="0.8"
+    opacity="0.5"
+  >LGE</text>
+  <text
+    x="256" y="420"
+    text-anchor="middle"
+    font-family="'SF Pro Display', 'Inter', 'Helvetica Neue', Arial, sans-serif"
+    font-size="52"
+    font-weight="800"
+    letter-spacing="10"
+    fill="#c084fc"
+    opacity="0.9"
+  >LGE</text>
+
+  <!-- Thin separator line above label -->
+  <line x1="160" y1="392" x2="352" y2="392" stroke="#7c3aed" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- ============================================================ -->
+  <!-- AMBIENT PARTICLES — subtle dots around the stack            -->
+  <!-- ============================================================ -->
+  <circle cx="110" cy="200" r="1.5" fill="#a855f7" opacity="0.4"/>
+  <circle cx="95" cy="310" r="1" fill="#7c3aed" opacity="0.3"/>
+  <circle cx="410" cy="220" r="1.5" fill="#a855f7" opacity="0.4"/>
+  <circle cx="390" cy="330" r="1" fill="#7c3aed" opacity="0.3"/>
+  <circle cx="140" cy="150" r="1" fill="#c084fc" opacity="0.35"/>
+  <circle cx="380" cy="160" r="1.2" fill="#c084fc" opacity="0.35"/>
+  <circle cx="200" cy="440" r="1" fill="#7c3aed" opacity="0.25"/>
+  <circle cx="320" cy="445" r="1" fill="#7c3aed" opacity="0.25"/>
+</svg>

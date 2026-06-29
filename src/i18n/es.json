@@ -1,0 +1,350 @@
+{
+  "app": {
+    "title": "LGE Cockpit"
+  },
+  "sidebar": {
+    "repositories": "Repositorios",
+    "addRepo": "Agregar Repositorio",
+    "noRepos": "No hay repositorios agregados"
+  },
+  "topbar": {
+    "noProcesses": "Ningún proceso LGE activo"
+  },
+  "tasks": {
+    "title": "Tareas",
+    "create": "Nueva Tarea",
+    "importJira": "Importar de Jira",
+    "empty": "No se encontraron tareas",
+    "emptyHint": "Crea una nueva tarea o importa de Jira",
+    "deleteConfirm": "¿Estás seguro de que deseas eliminar esta tarea?",
+    "deleteTitle": "¿Eliminar tarea?",
+    "deleteWarningWorktree": "El worktree activo será eliminado del disco.",
+    "deleteWarningBranch": "La rama \"{{branch}}\" será eliminada.",
+    "deletionPartialError": "Tarea eliminada, pero algunos recursos no pudieron eliminarse:",
+    "deleteDisabledRunning": "Cancela la fase LGE en ejecución antes de eliminar",
+    "filter": {
+      "placeholder": "Buscar por título o clave Jira...",
+      "noResults": "Ninguna tarea coincide con el filtro"
+    }
+  },
+  "createTask": {
+    "title": "Nueva Tarea",
+    "name": "Título",
+    "namePlaceholder": "Ej: Implementar autenticación OAuth2",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Describe la tarea...",
+    "cancel": "Cancelar",
+    "create": "Crear Tarea"
+  },
+  "importJira": {
+    "title": "Importar de Jira",
+    "key": "Clave de Jira",
+    "keyPlaceholder": "Ej: PROJ-123",
+    "cancel": "Cancelar",
+    "import": "Importar",
+    "importing": "Importando...",
+    "retry": "Reintentar",
+    "authenticate": "Abrir y autenticar",
+    "authRequiredTitle": "El MCP de Atlassian requiere autenticación",
+    "authRequiredBody": "Haz clic en \"Abrir y autenticar\" para abrir el enlace de OAuth en el navegador. Después de autorizar, vuelve aquí y haz clic en \"Reintentar\".",
+    "copyDiag": "Copiar diagnóstico",
+    "diagLoading": "Recopilando...",
+    "diagCopied": "¡Copiado!"
+  },
+  "status": {
+    "pending": "Pendiente",
+    "in_progress": "En Progreso",
+    "completed": "Completado"
+  },
+  "statusbar": {
+    "ready": "Listo",
+    "tasksCount": "{{count}} tarea(s)"
+  },
+  "taskDetail": {
+    "backToList": "Volver a tareas",
+    "description": "Descripción",
+    "noDescription": "Sin descripción",
+    "sourceManual": "Manual",
+    "sourceJira": "Jira",
+    "changeStatus": "Cambiar estado",
+    "startLge": "Iniciar Proceso LGE",
+    "createdAt": "Creado en",
+    "updatedAt": "Actualizado en",
+    "openInJira": "Abrir en Jira",
+    "edit": "Editar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "editTitle": "Título",
+    "editDescription": "Descripción",
+    "titlePlaceholder": "Título de la tarea",
+    "descriptionPlaceholder": "Descripción de la tarea"
+  },
+  "health": {
+    "checking": "Verificando dependencias...",
+    "allOk": "Todas las dependencias disponibles!",
+    "title": "Dependencias de LGE Cockpit",
+    "subtitle": "Algunas dependencias necesarias no fueron encontradas. La app puede funcionar con limitaciones.",
+    "recheck": "Verificar nuevamente",
+    "continueAnyway": "Continuar de todos modos",
+    "installWith": "Instalar con",
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "verifying": "Verificando"
+  },
+  "lge": {
+    "title": "Proceso LGE",
+    "processComplete": "Proceso LGE completado!",
+    "phase": {
+      "planning": "Planning",
+      "builder": "Builder",
+      "review": "Review",
+      "guardian": "Guardian"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "running": "Ejecutando...",
+      "queued": "En cola",
+      "completed": "Completado",
+      "failed": "Falló",
+      "interrupted": "Interrumpido"
+    },
+    "action": {
+      "continue": "Continuar a siguiente fase",
+      "goToPhase": "Ir a fase específica",
+      "interrupt": "Interrumpir",
+      "retry": "Reintentar",
+      "stop": "Detener proceso",
+      "viewArtifacts": "Ver artefactos generados",
+      "backToTask": "Volver a tarea"
+    },
+    "artifacts": {
+      "title": "Artefactos",
+      "empty": "Ningún artefacto generado aún",
+      "plan": "Plan",
+      "builder": "Builder",
+      "reviewer": "Reviewer",
+      "guardian": "Guardian",
+      "edit": "Editar",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "cancel": "Cancelar",
+      "artifactTab": "Artefacto",
+      "archTab": "Arquitectura",
+      "archDiff": {
+        "summary": "Resumen de Impacto",
+        "filesChanged": "Archivos",
+        "linesChanged": "Líneas",
+        "dependencies": "Dependencias",
+        "riskScore": "Riesgo",
+        "fileTree": "Árbol de Cambios",
+        "expandAll": "Expandir todo",
+        "collapseAll": "Colapsar todo",
+        "depGraph": "Grafo de Dependencias",
+        "depGraphEmpty": "No se detectaron cambios de dependencias",
+        "apiSurface": "Superficie de API",
+        "apiSurfaceEmpty": "No se detectaron cambios de API pública",
+        "timeline": "Comparación entre Fases",
+        "timelineEmpty": "Ejecute más fases para comparar",
+        "added": "agregado",
+        "modified": "modificado",
+        "removed": "eliminado",
+        "riskLow": "Bajo",
+        "riskMedium": "Medio",
+        "riskHigh": "Alto",
+        "riskCritical": "Crítico",
+        "analyzeBtn": "Analizar Impacto Arquitectural",
+        "analyzing": "Analizando...",
+        "reanalyze": "Reanalizar",
+        "emptyTitle": "Análisis de Impacto Arquitectural",
+        "emptyDesc": "Vea qué módulos fueron afectados, nuevas dependencias introducidas y el radio de impacto de esta fase.",
+        "emptyHint": "Rápido · Offline · Basado en git diff"
+      }
+    },
+    "context": {
+      "toggle": "Agregar instrucciones extra",
+      "placeholder": "Ej.: Enfocar en rendimiento. Usar connection pooling. Escribir tests con vitest...",
+      "hint": "Estas instrucciones se inyectarán al inicio del prompt de la fase."
+    }
+  },
+  "git": {
+    "commit": {
+      "messageLabel": "Mensaje de commit",
+      "manual": "Escribir manualmente",
+      "manualHint": "Tú escribes el mensaje",
+      "ai": "Generar con IA ✨",
+      "aiHint": "Claude lee el diff",
+      "aiAnalyzing": "Verificando cambios...",
+      "aiAnalyzingHint": "Claude está generando el mensaje de commit basado en el diff",
+      "aiGenerated": "Generado por Claude",
+      "regenerate": "Generar de nuevo",
+      "changeMode": "Cambiar modo"
+    },
+    "branch": {
+      "title": "Rama Git",
+      "create": "Crear Rama",
+      "dialogTitle": "Crear Rama Git",
+      "nameLabel": "Nombre de la rama",
+      "baseLabel": "Rama base",
+      "baseHint": "La rama base se actualizará con pull antes de crear la nueva rama. Por defecto: develop.",
+      "creating": "Creando...",
+      "confirm": "Crear Rama"
+    },
+    "worktree": {
+      "active": "Worktree activo",
+      "remove": "Eliminar worktree",
+      "openInIde": "Abrir en VS Code",
+      "copyPath": "Copiar ruta",
+      "copied": "Copiado!",
+      "cleanCompleted": "Limpiar worktrees completadas",
+      "cleanAll": "Limpiar todo",
+      "cleaning": "Limpiando...",
+      "cleaned": "Worktree eliminado con éxito",
+      "cleanupAfterPr": "Limpiar worktree",
+      "limitReached": "Límite de worktrees alcanzado",
+      "staleAlert": "Tienes {{count}} worktree(s) de tareas completadas hace más de 7 días"
+    },
+    "pr": {
+      "panelTitle": "Listo para Pull Request",
+      "titleLabel": "Título del PR",
+      "titlePlaceholder": "Describe los cambios...",
+      "bodyLabel": "Descripción del PR",
+      "bodyPlaceholder": "Resumen de lo implementado...",
+      "commitAndOpen": "Commit, Push & Abrir PR",
+      "loading": "Procesando...",
+      "success": "¡Pull request creado con éxito!",
+      "manualHint": "Ejecute manualmente en la terminal:",
+      "copyCommand": "Copiar comando",
+      "copied": "¡Copiado!"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "models": {
+      "title": "Modelo por Fase",
+      "description": "Elige qué modelo Claude usar en cada fase del proceso LGE.",
+      "planning": "Planning",
+      "builder": "Builder",
+      "review": "Review",
+      "guardian": "Guardian",
+      "opus": "Opus",
+      "sonnet": "Sonnet",
+      "haiku": "Haiku",
+      "opusDesc": "Más capaz, más lento",
+      "sonnetDesc": "Equilibrado",
+      "haikuDesc": "Más rápido, más económico"
+    },
+    "save": "Guardar",
+    "saved": "¡Configuración guardada!",
+    "shellEnv": {
+      "title": "Entorno Shell",
+      "description": "Comandos para ejecutar antes de cada operación del Cockpit (git, Claude CLI, etc). Un comando por línea. Líneas con # se ignoran.",
+      "placeholder": "# Ejemplo:\nunset GOROOT\nnvm use 18\npyenv shell 3.11"
+    },
+    "jiraBaseUrl": {
+      "title": "URL base de Jira",
+      "description": "URL de tu sitio Atlassian Cloud (ej: https://tuempresa.atlassian.net). Se usa al importar tareas de Jira para construir el enlace de la issue. Déjalo vacío para intentar derivarlo automáticamente de la respuesta del MCP.",
+      "placeholder": "https://tuempresa.atlassian.net"
+    }
+  },
+  "whatsNew": {
+    "title": "Novedades",
+    "chipTooltip": "Ver novedades",
+    "close": "Cerrar",
+    "latest": "Actual",
+    "releases": {
+      "v071": {
+        "title": "v0.7.1 — URL base de Jira configurable",
+        "f1": "Campo de URL base de Jira en Configuración para construir enlaces de issues",
+        "f2": "Se eliminó la URL hardcoded del tenant; los prompts del MCP ahora derivan la URL del sitio configurado"
+      },
+      "v070": {
+        "title": "v0.7.0 — Eliminación Segura",
+        "f1": "Diálogo de confirmación antes de eliminar tareas o proyectos",
+        "f2": "Limpieza automática de worktree y rama al eliminar una tarea",
+        "f3": "Cascada completa al eliminar un proyecto: tareas, worktrees y ramas",
+        "f4": "Vista previa de recursos afectados en el diálogo de eliminación de proyecto",
+        "f5": "Botón eliminar deshabilitado mientras una fase LGE está en ejecución"
+      },
+      "v060": {
+        "title": "v0.6.0 — Anexos, MCP Atlassian y Markdown",
+        "f1": "Adjuntar archivos (.md, .txt, .json, .csv) a una tarea como contexto adicional",
+        "f2": "Selección granular de fases: elige en qué fases LGE se inyecta cada archivo",
+        "f3": "Contenido inyectado automáticamente en los prompts bajo '## Contexto Adicional'",
+        "f4": "Health check reconoce MCPs añadidos vía `claude mcp add` (ej.: `atlassian: uvx mcp-atlassian`)",
+        "f5": "La importación de Jira tolera diferentes convenciones de tools (`getJiraIssue` / `jira_get_issue`)",
+        "f6": "Diálogo dedicado cuando el MCP Atlassian necesita OAuth: abre el enlace en el navegador y permite reintentar tras autorizar",
+        "f7": "Importación Jira literal: tablas, bloques de código, rutas de archivos y listas se convierten fielmente de ADF a Markdown — sin resúmenes silenciosos",
+        "f8": "La descripción de la tarea se renderiza con Markdown formateado: tablas, bloques de código, encabezados y listas se muestran correctamente en lugar de texto plano"
+      },
+      "v050": {
+        "title": "v0.5.0 — Shell, Worktrees & Live Architecture",
+        "f1": "Configuración de entorno shell personalizado por repositorio",
+        "f2": "Botón de limpieza de worktree limitado a la tarea (sin efectos colaterales)",
+        "f3": "Corrección de parsing de URL en Pull Requests",
+        "f4": "Live Architecture Diff — análisis de impacto por fase (archivos, líneas, riesgo)",
+        "f5": "El card de worktree aparece de inmediato al crear una branch"
+      },
+      "v040": {
+        "title": "v0.4.0 — Artefactos Unificados",
+        "f1": "Artefacto único por fase (Quick Context + detalles completos)",
+        "f2": "Lectura de artefactos desde disco (elimina parsing de stdout)",
+        "f3": "Menor consumo de tokens por fase (sin duplicación de contenido)"
+      },
+      "v030": {
+        "title": "v0.3.0 — Aislamiento Paralelo con Worktrees",
+        "f1": "Worktrees Git aisladas por tarea",
+        "f2": "Abrir en IDE + Copiar ruta",
+        "f3": "Limpieza inteligente (detección de stale, batch, post-PR)",
+        "f4": "Badge de conteo de worktrees en sidebar",
+        "f5": "Límite de 5 worktrees por repositorio",
+        "f6": "Health check de dependencias Git",
+        "f7": "Configuración de modelo por fase (Opus, Sonnet, Haiku)"
+      },
+      "v020": {
+        "title": "v0.2.0 — Integración Git",
+        "f1": "Crear rama con un clic",
+        "f2": "Mensajes de commit generados por IA",
+        "f3": "Abrir Pull Request desde la app",
+        "f4": "Seguimiento de rama por tarea"
+      },
+      "v010": {
+        "title": "v0.1.0 — Fundación",
+        "f1": "Gestión de repositorios locales",
+        "f2": "CRUD de tareas con seguimiento de estado",
+        "f3": "Importación de Jira vía MCP Atlassian",
+        "f4": "Búsqueda y filtro de tareas",
+        "f5": "Edición inline de tareas",
+        "f6": "Pipeline LGE de 4 fases (Planning, Builder, Review, Guardian)",
+        "f7": "Inyección de contexto por fase",
+        "f8": "Edición de artefactos entre fases",
+        "f9": "Cancelación de fase",
+        "f10": "Health check de dependencias",
+        "f11": "Notificaciones nativas macOS",
+        "f12": "i18n (PT-BR, EN, ES)"
+      }
+    }
+  },
+  "attachments": {
+    "title": "Anexos",
+    "add": "Adjuntar archivo",
+    "remove": "Eliminar anexo",
+    "empty": "Sin anexos",
+    "tooLarge": "Archivo excede límite de 2MB",
+    "unsupportedType": "Tipo no soportado. Aceptados: .md, .txt, .json, .csv",
+    "pdfNotSupported": "Extracción PDF/DOCX aún no soportada. Convierta a .md o .txt.",
+    "phase": "Fase de inyección",
+    "selectPhase": "Seleccionar fase"
+  },
+  "common": {
+    "remove": "Eliminar",
+    "delete": "Borrar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "irreversible": "Esta acción no se puede deshacer.",
+    "loading": "Cargando..."
+  },
+  "repos": {
+    "deleteTitle": "¿Eliminar repositorio?",
+    "deleteStats": "{{tasks}} tarea(s) · {{worktrees}} worktree(s) · {{branches}} rama(s) serán eliminados."
+  }
+}
