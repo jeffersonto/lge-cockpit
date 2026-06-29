@@ -1,15 +1,10 @@
 use std::collections::HashMap;
 use tauri::State;
 
+use crate::models::Phase;
 use crate::AppState;
 
 const VALID_MODELS: &[&str] = &["opus", "sonnet", "haiku"];
-const PHASE_KEYS: &[&str] = &[
-    "model_planning",
-    "model_builder",
-    "model_review",
-    "model_guardian",
-];
 
 #[tauri::command]
 pub fn get_phase_models(state: State<AppState>) -> Result<HashMap<String, String>, String> {
@@ -20,14 +15,12 @@ pub fn get_phase_models(state: State<AppState>) -> Result<HashMap<String, String
         .prepare("SELECT key, value FROM settings WHERE key IN (?1, ?2, ?3, ?4)")
         .map_err(|e| e.to_string())?;
 
+    // Keys derived from the Phase module's canonical list — replaces the
+    // duplicated PHASE_KEYS const (which had drifted into a 6th copy).
+    let keys: [String; 4] = Phase::ALL.map(|p| format!("model_{}", p.as_str()));
     let rows = stmt
         .query_map(
-            rusqlite::params![
-                PHASE_KEYS[0],
-                PHASE_KEYS[1],
-                PHASE_KEYS[2],
-                PHASE_KEYS[3],
-            ],
+            rusqlite::params![keys[0], keys[1], keys[2], keys[3]],
             |row| Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?)),
         )
         .map_err(|e| e.to_string())?;
@@ -54,11 +47,14 @@ pub fn save_phase_models(
             return Err(format!("Invalid model '{}' for phase '{}'", model, phase));
         }
 
-        let key = format!("model_{}", phase);
-        if !PHASE_KEYS.contains(&key.as_str()) {
-            return Err(format!("Unknown phase: {}", phase));
-        }
+        // Validate the phase name via the Phase module (replaces the
+        // PHASE_KEYS.contains check). Unknown phases are rejected here, at the
+        // seam, rather than silently writing a dangling settings row.
+        let parsed: Phase = phase.as_str().parse().map_err(|e: crate::models::ParsePhaseError| {
+            format!("Unknown phase: {}", e)
+        })?;
 
+        let key = format!("model_{}", parsed.as_str());
         let affected = conn
             .execute(
                 "UPDATE settings SET value = ?1 WHERE key = ?2",
