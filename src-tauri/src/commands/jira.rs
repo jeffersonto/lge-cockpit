@@ -3,30 +3,9 @@ use tauri::State;
 use uuid::Uuid;
 
 use crate::db::queries;
-use crate::jira::{JiraClient, JiraConfig, JiraError, JiraSelf, ReqwestJiraClient};
+use crate::jira::{self, JiraClient, JiraError, JiraSelf, ReqwestJiraClient};
 use crate::models::{Task, TaskSource};
 use crate::AppState;
-
-/// Reads the Jira connection params (base URL, email, API token) from the
-/// settings table. All three are returned even when empty — the client
-/// constructor turns a missing trio into a clear `NotConfigured` error.
-fn read_jira_config(conn: &rusqlite::Connection) -> JiraConfig {
-    let get = |key: &str| -> String {
-        conn.query_row(
-            "SELECT value FROM settings WHERE key = ?1",
-            rusqlite::params![key],
-            |row| row.get::<_, String>(0),
-        )
-        .unwrap_or_default()
-        .trim()
-        .to_string()
-    };
-    JiraConfig {
-        base_url: get("jira_base_url"),
-        email: get("jira_email"),
-        api_token: get("jira_api_token"),
-    }
-}
 
 /// Imports a Jira Cloud issue by key and creates a local `Task` from it.
 /// The description is converted from Atlassian's rendered HTML to Markdown.
@@ -38,14 +17,14 @@ pub async fn import_jira_task(
 ) -> Result<Task, String> {
     let jira_key = jira_key.trim().to_uppercase();
     if jira_key.is_empty() {
-        return Err("Informe a chave da issue do Jira (ex: PROJ-123).".to_string());
+        return Err("Provide a Jira issue key (e.g. PROJ-123).".to_string());
     }
 
     let config = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
         // Validate the repository up front for a clear error.
         let _ = queries::get_repository_path(&conn, &repository_id)?;
-        read_jira_config(&conn)
+        jira::read_jira_config(&conn)
     };
 
     let client = ReqwestJiraClient::new(config).map_err(|e| e.to_string())?;
@@ -83,7 +62,7 @@ pub async fn import_jira_task(
 pub async fn verify_jira_connection(state: State<'_, AppState>) -> Result<JiraSelf, String> {
     let config = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        read_jira_config(&conn)
+        jira::read_jira_config(&conn)
     };
     let client = ReqwestJiraClient::new(config).map_err(|e| e.to_string())?;
     client

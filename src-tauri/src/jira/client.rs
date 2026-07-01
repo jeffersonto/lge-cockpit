@@ -16,6 +16,7 @@ pub trait JiraClient {
 
 /// Production adapter backed by `reqwest`. Holds a pre-built HTTP client
 /// and the resolved Jira config.
+#[derive(Debug)]
 pub struct ReqwestJiraClient {
     config: JiraConfig,
     http: reqwest::Client,
@@ -25,6 +26,13 @@ impl ReqwestJiraClient {
     pub fn new(config: JiraConfig) -> Result<Self, JiraError> {
         if !config.is_complete() {
             return Err(JiraError::NotConfigured);
+        }
+        // Surface a missing URL scheme explicitly rather than letting
+        // reqwest fail later with a generic "relative URL without base"
+        // network error that's hard for the user to map back to Settings.
+        let scheme = config.base_url_trimmed();
+        if !scheme.starts_with("http://") && !scheme.starts_with("https://") {
+            return Err(JiraError::InvalidBaseUrl(config.base_url.clone()));
         }
         let http = reqwest::Client::builder()
             .timeout(Duration::from_secs(30))
@@ -186,19 +194,23 @@ fn validate_key(key: &str) -> Result<(), JiraError> {
 
 /// Minimal path-segment encoder so the key may be safely placed in the URL
 /// path without pulling in another crate. Jira keys are alphanumeric plus
-/// hyphen, so this only encodes the rare stray character.
+/// hyphen, so this only encodes the rare stray character. Non-ASCII bytes are
+/// percent-encoded per UTF-8 so the encoder stays correct for arbitrary input
+/// (it never silently truncates a `char > 255`).
 mod urlencoding {
     pub fn encode_path(segment: &str) -> String {
-        segment
-            .chars()
-            .map(|c| {
-                if c.is_ascii_alphanumeric() || c == '-' {
-                    c.to_string()
-                } else {
-                    format!("%{:02X}", c as u8)
+        let mut out = String::with_capacity(segment.len());
+        for c in segment.chars() {
+            if c.is_ascii_alphanumeric() || c == '-' {
+                out.push(c);
+            } else {
+                let mut buf = [0u8; 4];
+                for b in c.encode_utf8(&mut buf).as_bytes() {
+                    out.push_str(&format!("%{:02X}", b));
                 }
-            })
-            .collect()
+            }
+        }
+        out
     }
 }
 
@@ -222,6 +234,38 @@ mod tests {
     }
 
     #[test]
+    fn new_rejects_missing_scheme() {
+        let cfg = JiraConfig {
+            base_url: "yourcompany.atlassian.net".to_string(),
+            email: "u@example.com".to_string(),
+            api_token: "tok".to_string(),
+        };
+        let err = ReqwestJiraClient::new(cfg).unwrap_err();
+        assert!(matches!(err, JiraError::InvalidBaseUrl(_)));
+    }
+
+    #[test]
+    fn new_accepts_https_scheme() {
+        let cfg = JiraConfig {
+            base_url: "https://yourcompany.atlassian.net".to_string(),
+            email: "u@example.com".to_string(),
+            api_token: "tok".to_string(),
+        };
+        assert!(ReqwestJiraClient::new(cfg).is_ok());
+    }
+
+    #[test]
+    fn new_rejects_unset_credentials_with_not_configured() {
+        let cfg = JiraConfig {
+            base_url: "https://x.atlassian.net".to_string(),
+            email: String::new(),
+            api_token: "tok".to_string(),
+        };
+        let err = ReqwestJiraClient::new(cfg).unwrap_err();
+        assert!(matches!(err, JiraError::NotConfigured));
+    }
+
+    #[test]
     fn parses_summary_and_status() {
         let body = r#"{
             "key": "PROJ-1",
@@ -237,6 +281,16 @@ mod tests {
         assert_eq!(issue.status.as_deref(), Some("In Progress"));
         assert!(issue.description.as_deref().unwrap().contains("Hello"));
         assert_eq!(issue.url, "https://x.atlassian.net/browse/PROJ-1");
+    }
+
+    #[test]
+    fn encode_path_preserves_ascii_and_encodes_utf8() {
+        assert_eq!(urlencoding::encode_path("PROJ-123"), "PROJ-123");
+        // Space and reserved punctuation get percent-encoded.
+        assert_eq!(urlencoding::encode_path("a b/c"), "a%20b%2Fc");
+        // Non-ASCII is encoded per UTF-8 bytes, not truncated.
+        // 'ç' = U+00E7 -> UTF-8 0xC3 0xA7
+        assert_eq!(urlencoding::encode_path("caça"), "ca%C3%A7a");
     }
 
     #[test]

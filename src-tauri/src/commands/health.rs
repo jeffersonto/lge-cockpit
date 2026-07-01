@@ -3,6 +3,7 @@ use tauri::State;
 use tauri_plugin_shell::ShellExt;
 
 use crate::commands::claude_utils::{resolve_claude_path, user_shell};
+use crate::jira;
 use crate::AppState;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -65,19 +66,7 @@ pub async fn check_dependencies(
     // the live verify via `verify_jira_connection`.
     let jira_configured = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        let get = |key: &str| -> String {
-            conn.query_row(
-                "SELECT value FROM settings WHERE key = ?1",
-                rusqlite::params![key],
-                |row| row.get::<_, String>(0),
-            )
-            .unwrap_or_default()
-            .trim()
-            .to_string()
-        };
-        !get("jira_base_url").is_empty()
-            && !get("jira_email").is_empty()
-            && !get("jira_api_token").is_empty()
+        jira::read_jira_config(&conn).is_complete()
     };
 
     deps.push(DependencyStatus {

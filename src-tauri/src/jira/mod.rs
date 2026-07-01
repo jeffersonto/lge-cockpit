@@ -12,6 +12,7 @@ mod converter;
 
 pub use client::{JiraClient, ReqwestJiraClient};
 
+use crate::db::queries;
 use crate::models::TaskStatus;
 
 /// Jira Cloud connection parameters read from the app's settings table.
@@ -39,6 +40,19 @@ impl JiraConfig {
         !self.base_url.trim().is_empty()
             && !self.email.trim().is_empty()
             && !self.api_token.trim().is_empty()
+    }
+}
+
+/// Reads the Jira connection params (base URL, email, API token) from the
+/// settings table. All three fields are returned even when empty — the
+/// client constructor turns a missing trio into a clear `NotConfigured`
+/// error. Single source of truth shared by every call site that needs the
+/// configured Jira credentials.
+pub fn read_jira_config(conn: &rusqlite::Connection) -> JiraConfig {
+    JiraConfig {
+        base_url: queries::get_setting(conn, "jira_base_url").unwrap_or_default(),
+        email: queries::get_setting(conn, "jira_email").unwrap_or_default(),
+        api_token: queries::get_setting(conn, "jira_api_token").unwrap_or_default(),
     }
 }
 
@@ -87,6 +101,10 @@ pub enum JiraError {
     NotConfigured,
     #[error("Invalid Jira issue key: {0}")]
     InvalidKey(String),
+    #[error(
+        "Jira base URL must start with \"http://\" or \"https://\" (got {0}). Update it in Settings."
+    )]
+    InvalidBaseUrl(String),
     #[error("Jira authentication failed — verify the email and API token in Settings.")]
     Unauthorized,
     #[error("Jira issue not found: {0}")]
