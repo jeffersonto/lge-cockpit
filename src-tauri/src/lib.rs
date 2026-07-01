@@ -5,9 +5,11 @@ use rusqlite::Connection;
 use tauri::Manager;
 use tokio::sync::Semaphore;
 
+mod claude_invocation;
 mod commands;
 mod db;
 mod models;
+mod phase_runner;
 
 pub struct AppState {
     pub db: Mutex<Connection>,
