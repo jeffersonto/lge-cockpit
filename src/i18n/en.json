@@ -42,14 +42,7 @@
     "keyPlaceholder": "E.g.: PROJ-123",
     "cancel": "Cancel",
     "import": "Import",
-    "importing": "Importing...",
-    "retry": "Retry",
-    "authenticate": "Open and authenticate",
-    "authRequiredTitle": "Atlassian MCP requires authentication",
-    "authRequiredBody": "Click \"Open and authenticate\" to launch the OAuth link in your browser. After authorizing, come back here and click \"Retry\".",
-    "copyDiag": "Copy diagnostic",
-    "diagLoading": "Collecting...",
-    "diagCopied": "Copied!"
+    "importing": "Importing..."
   },
   "status": {
     "pending": "Pending",
@@ -240,10 +233,18 @@
       "description": "Commands to run before every Cockpit operation (git, Claude CLI, etc). One command per line. Lines starting with # are ignored.",
       "placeholder": "# Example:\nunset GOROOT\nnvm use 18\npyenv shell 3.11"
     },
-    "jiraBaseUrl": {
-      "title": "Jira Base URL",
-      "description": "Your Atlassian Cloud site URL (e.g. https://yourcompany.atlassian.net). Used when importing Jira tasks to build the issue link. Leave empty to attempt deriving it automatically from the MCP response.",
-      "placeholder": "https://yourcompany.atlassian.net"
+    "jira": {
+      "title": "Jira Connection",
+      "description": "Configure your Atlassian Cloud credentials to import tasks from Jira.",
+      "baseUrl": "Jira base URL",
+      "baseUrlPlaceholder": "https://yourcompany.atlassian.net",
+      "email": "Email",
+      "emailPlaceholder": "you@yourcompany.com",
+      "apiToken": "API token",
+      "apiTokenPlaceholder": "Generate one at Atlassian account settings → Security → Create and manage API tokens",
+      "apiTokenHint": "Create an API token in your Atlassian account → Security → API tokens.",
+      "testConnection": "Test connection",
+      "testing": "Testing..."
     }
   },
   "whatsNew": {
@@ -252,6 +253,12 @@
     "close": "Close",
     "latest": "Latest",
     "releases": {
+      "v080": {
+        "title": "v0.8.0 — Direct Jira API",
+        "f1": "Jira import now uses the Atlassian REST API directly — no MCP or Claude CLI required",
+        "f2": "Settings gains email and API token fields plus a \"Test connection\" button",
+        "f3": "Health check verifies Jira credentials instead of MCP availability"
+      },
       "v071": {
         "title": "v0.7.1 — Configurable Jira Base URL",
         "f1": "Jira base URL field in Settings to build issue links",

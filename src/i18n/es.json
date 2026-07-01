@@ -42,14 +42,7 @@
     "keyPlaceholder": "Ej: PROJ-123",
     "cancel": "Cancelar",
     "import": "Importar",
-    "importing": "Importando...",
-    "retry": "Reintentar",
-    "authenticate": "Abrir y autenticar",
-    "authRequiredTitle": "El MCP de Atlassian requiere autenticación",
-    "authRequiredBody": "Haz clic en \"Abrir y autenticar\" para abrir el enlace de OAuth en el navegador. Después de autorizar, vuelve aquí y haz clic en \"Reintentar\".",
-    "copyDiag": "Copiar diagnóstico",
-    "diagLoading": "Recopilando...",
-    "diagCopied": "¡Copiado!"
+    "importing": "Importando..."
   },
   "status": {
     "pending": "Pendiente",
@@ -240,10 +233,18 @@
       "description": "Comandos para ejecutar antes de cada operación del Cockpit (git, Claude CLI, etc). Un comando por línea. Líneas con # se ignoran.",
       "placeholder": "# Ejemplo:\nunset GOROOT\nnvm use 18\npyenv shell 3.11"
     },
-    "jiraBaseUrl": {
-      "title": "URL base de Jira",
-      "description": "URL de tu sitio Atlassian Cloud (ej: https://tuempresa.atlassian.net). Se usa al importar tareas de Jira para construir el enlace de la issue. Déjalo vacío para intentar derivarlo automáticamente de la respuesta del MCP.",
-      "placeholder": "https://tuempresa.atlassian.net"
+    "jira": {
+      "title": "Conexión con Jira",
+      "description": "Configura tus credenciales de Atlassian Cloud para importar tareas de Jira.",
+      "baseUrl": "URL base de Jira",
+      "baseUrlPlaceholder": "https://tuempresa.atlassian.net",
+      "email": "Email",
+      "emailPlaceholder": "tu@tuempresa.com",
+      "apiToken": "Token de API",
+      "apiTokenPlaceholder": "Genera uno en la configuración de la cuenta Atlassian → Seguridad → Crear y gestionar tokens de API",
+      "apiTokenHint": "Crea un token de API en tu cuenta Atlassian → Seguridad → Tokens de API.",
+      "testConnection": "Probar conexión",
+      "testing": "Probando..."
     }
   },
   "whatsNew": {
@@ -252,6 +253,12 @@
     "close": "Cerrar",
     "latest": "Actual",
     "releases": {
+      "v080": {
+        "title": "v0.8.0 — API directa de Jira",
+        "f1": "La importación de Jira ahora usa la API REST de Atlassian directamente — sin MCP ni Claude CLI",
+        "f2": "Ajustes gana campos de email y token de API, además del botón \"Probar conexión\"",
+        "f3": "Health check verifica credenciales de Jira en vez de la disponibilidad del MCP"
+      },
       "v071": {
         "title": "v0.7.1 — URL base de Jira configurable",
         "f1": "Campo de URL base de Jira en Configuración para construir enlaces de issues",

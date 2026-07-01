@@ -60,6 +60,49 @@ Generics (not `&dyn`) so native `async fn` in traits works without the `async_tr
 
 PhaseRunner owns artifact **retrieval** (decided during the `Phase` grilling — `Phase` is pure and stops at the contract). For builder/review/guardian it reads `docs/tasks/{code}/{filename}` from disk; for planning it calls the existing `resolve_plan_file` (the 5-minute mtime scan of `~/.claude/plans/`). The race (two plannings within 5 min → wrong plan on wrong task) is **pre-existing and explicitly out of scope for C01** — marked TODO to fix once `claude --permission-mode plan`'s support for `--output-format json` is confirmed (plan would come back in stdout, killing the scan).
 
+---
+
+## Jira Integration
+
+Boundary between the app and Atlassian Jira Cloud. Responsible for fetching issue data and, in the future, posting updates back to Jira.
+
+### Jira Client
+
+The deep module that owns all communication with the Jira Cloud REST API. Exposes a small, domain-oriented interface (e.g., `get_issue`) and hides HTTP, authentication, and Atlassian-specific formats behind an adapter.
+
+_Avoid_: MCP, Claude CLI, `mcp-atlassian`, Jira importer.
+
+### Jira Credentials
+
+The authentication pair used to call Jira Cloud: the user's Atlassian account email and an API token generated in the Atlassian account settings. Stored as app settings; never logged or committed.
+
+_Avoid_: Password, PAT, OAuth token, MCP token.
+
+### Jira Issue Import
+
+The operation of reading a Jira issue by key and creating a local `Task` from it. Captures summary, status, URL, and a Markdown representation of the description.
+
+_Avoid_: Jira sync, Jira fetch, MCP import.
+
+### Imported Task
+
+A `Task` whose `source` is `jira` and that carries a `jira_key`. The source records that the task originated from Jira, regardless of which integration mechanism was used at the time of import.
+
+_Avoid_: Jira task, external task.
+
+### Issue Description Conversion
+
+The transformation of a Jira issue description from Atlassian's rendered HTML into GitHub-Flavored Markdown before it is stored in a `Task`. Preserves tables, code blocks, lists, and links.
+
+_Avoid_: ADF conversion, description parsing.
+
+### Jira Connection Test
+
+A lightweight operation that verifies the configured `Jira Credentials` and `Jira base URL` by calling an authenticated Jira endpoint. Used from Settings before any import is attempted.
+
+_Avoid_: Jira diagnostic, MCP health check.
+
+
 ### Tests
 
 `#[cfg(test)]` in `phase_runner.rs`, run via `cargo test`. With three fake ports + in-memory SQLite + temp dirs, the whole orchestration is testable: queue acquire emits queued→dequeued; planning invokes with `Permission::Plan`; guardian updates status to `completed`; cancel-while-queued returns `PhaseRunError::Cancelled`; Claude failure returns `ClaudeFailed`; missing artifact returns `ArtifactMissing`; attachment context is merged into the prompt (asserted via a fake `ClaudeInvocation` that captures the request).

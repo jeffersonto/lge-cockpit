@@ -113,3 +113,51 @@ pub fn save_jira_base_url(state: State<AppState>, jira_base_url: String) -> Resu
     .map_err(|e| e.to_string())?;
     Ok(())
 }
+
+#[tauri::command]
+pub fn get_jira_email(state: State<AppState>) -> Result<String, String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    let value: String = conn
+        .query_row(
+            "SELECT value FROM settings WHERE key = 'jira_email'",
+            [],
+            |row| row.get::<_, String>(0),
+        )
+        .unwrap_or_default();
+    Ok(value.trim().to_string())
+}
+
+#[tauri::command]
+pub fn save_jira_email(state: State<AppState>, jira_email: String) -> Result<(), String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    conn.execute(
+        "INSERT INTO settings (key, value) VALUES ('jira_email', ?1) ON CONFLICT(key) DO UPDATE SET value = ?1",
+        rusqlite::params![jira_email],
+    )
+    .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn get_jira_api_token(state: State<AppState>) -> Result<String, String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    let value: String = conn
+        .query_row(
+            "SELECT value FROM settings WHERE key = 'jira_api_token'",
+            [],
+            |row| row.get::<_, String>(0),
+        )
+        .unwrap_or_default();
+    Ok(value.trim().to_string())
+}
+
+#[tauri::command]
+pub fn save_jira_api_token(state: State<AppState>, jira_api_token: String) -> Result<(), String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    conn.execute(
+        "INSERT INTO settings (key, value) VALUES ('jira_api_token', ?1) ON CONFLICT(key) DO UPDATE SET value = ?1",
+        rusqlite::params![jira_api_token],
+    )
+    .map_err(|e| e.to_string())?;
+    Ok(())
+}

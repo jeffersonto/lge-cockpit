@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { LgePhaseId } from "../types";
+import type { LgePhaseId, JiraSelf } from "../types";
 import * as api from "../lib/tauri";
 
 const DEFAULT_MODELS: Record<LgePhaseId, string> = {
@@ -13,6 +13,8 @@ interface SettingsState {
   phaseModels: Record<LgePhaseId, string>;
   shellEnv: string;
   jiraBaseUrl: string;
+  jiraEmail: string;
+  jiraApiToken: string;
   loaded: boolean;
   fetchPhaseModels: () => Promise<void>;
   savePhaseModels: (models: Record<LgePhaseId, string>) => Promise<void>;
@@ -20,12 +22,19 @@ interface SettingsState {
   saveShellEnv: (shellEnv: string) => Promise<void>;
   fetchJiraBaseUrl: () => Promise<void>;
   saveJiraBaseUrl: (jiraBaseUrl: string) => Promise<void>;
+  fetchJiraEmail: () => Promise<void>;
+  saveJiraEmail: (jiraEmail: string) => Promise<void>;
+  fetchJiraApiToken: () => Promise<void>;
+  saveJiraApiToken: (jiraApiToken: string) => Promise<void>;
+  verifyConnection: () => Promise<JiraSelf>;
 }
 
 export const useSettingsStore = create<SettingsState>((set) => ({
   phaseModels: { ...DEFAULT_MODELS },
   shellEnv: "",
   jiraBaseUrl: "",
+  jiraEmail: "",
+  jiraApiToken: "",
   loaded: false,
 
   fetchPhaseModels: async () => {
@@ -76,5 +85,37 @@ export const useSettingsStore = create<SettingsState>((set) => ({
   saveJiraBaseUrl: async (jiraBaseUrl) => {
     await api.saveJiraBaseUrl(jiraBaseUrl);
     set({ jiraBaseUrl });
+  },
+
+  fetchJiraEmail: async () => {
+    try {
+      const jiraEmail = await api.getJiraEmail();
+      set({ jiraEmail });
+    } catch {
+      // ignore — default empty string is fine
+    }
+  },
+
+  saveJiraEmail: async (jiraEmail) => {
+    await api.saveJiraEmail(jiraEmail);
+    set({ jiraEmail });
+  },
+
+  fetchJiraApiToken: async () => {
+    try {
+      const jiraApiToken = await api.getJiraApiToken();
+      set({ jiraApiToken });
+    } catch {
+      // ignore — default empty string is fine
+    }
+  },
+
+  saveJiraApiToken: async (jiraApiToken) => {
+    await api.saveJiraApiToken(jiraApiToken);
+    set({ jiraApiToken });
+  },
+
+  verifyConnection: async () => {
+    return api.verifyJiraConnection();
   },
 }));
