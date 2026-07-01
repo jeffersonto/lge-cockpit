@@ -2,6 +2,33 @@ use rusqlite::{params, Connection};
 
 use crate::models::{Repository, Task, TaskSource, TaskStatus};
 
+// --- Settings ---
+
+/// Reads a single setting value by key. Returns `None` when the row is
+/// missing or empty so callers can distinguish "unset" from "set but blank".
+/// The value is trimmed because the settings UI may persist stray whitespace.
+pub fn get_setting(conn: &Connection, key: &str) -> Option<String> {
+    conn.query_row(
+        "SELECT value FROM settings WHERE key = ?1",
+        params![key],
+        |row| row.get::<_, String>(0),
+    )
+    .ok()
+    .map(|v| v.trim().to_string())
+}
+
+/// Upserts a setting row by key. New rows are inserted; existing rows are
+/// updated in place. The `ON CONFLICT` clause keeps this a single statement
+/// regardless of whether the key already exists.
+pub fn set_setting(conn: &Connection, key: &str, value: &str) -> Result<(), String> {
+    conn.execute(
+        "INSERT INTO settings (key, value) VALUES (?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?2",
+        params![key, value],
+    )
+    .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
 // --- Repositories ---
 
 pub fn insert_repository(conn: &Connection, repo: &Repository) -> Result<(), String> {

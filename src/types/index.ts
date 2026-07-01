@@ -148,3 +148,9 @@ export interface ProjectDeletePreview {
   worktree_count: number;
   branch_count: number;
 }
+
+export interface JiraSelf {
+  account_id: string;
+  display_name: string;
+  email: string;
+}

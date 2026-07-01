@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use tauri::State;
 
+use crate::db::queries;
 use crate::models::Phase;
 use crate::AppState;
 
@@ -73,43 +74,47 @@ pub fn save_phase_models(
 #[tauri::command]
 pub fn get_shell_env(state: State<AppState>) -> Result<String, String> {
     let conn = state.db.lock().map_err(|e| e.to_string())?;
-    conn.query_row(
-        "SELECT value FROM settings WHERE key = 'shell_env'",
-        [],
-        |row| row.get::<_, String>(0),
-    )
-    .map_err(|e| e.to_string())
+    queries::get_setting(&conn, "shell_env").ok_or_else(|| "shell_env is not set".to_string())
 }
 
 #[tauri::command]
 pub fn save_shell_env(state: State<AppState>, shell_env: String) -> Result<(), String> {
     let conn = state.db.lock().map_err(|e| e.to_string())?;
-    conn.execute(
-        "INSERT INTO settings (key, value) VALUES ('shell_env', ?1) ON CONFLICT(key) DO UPDATE SET value = ?1",
-        rusqlite::params![shell_env],
-    )
-    .map_err(|e| e.to_string())?;
-    Ok(())
+    queries::set_setting(&conn, "shell_env", &shell_env)
 }
 
 #[tauri::command]
 pub fn get_jira_base_url(state: State<AppState>) -> Result<String, String> {
     let conn = state.db.lock().map_err(|e| e.to_string())?;
-    conn.query_row(
-        "SELECT value FROM settings WHERE key = 'jira_base_url'",
-        [],
-        |row| row.get::<_, String>(0),
-    )
-    .map_err(|e| e.to_string())
+    Ok(queries::get_setting(&conn, "jira_base_url").unwrap_or_default())
 }
 
 #[tauri::command]
 pub fn save_jira_base_url(state: State<AppState>, jira_base_url: String) -> Result<(), String> {
     let conn = state.db.lock().map_err(|e| e.to_string())?;
-    conn.execute(
-        "INSERT INTO settings (key, value) VALUES ('jira_base_url', ?1) ON CONFLICT(key) DO UPDATE SET value = ?1",
-        rusqlite::params![jira_base_url],
-    )
-    .map_err(|e| e.to_string())?;
-    Ok(())
+    queries::set_setting(&conn, "jira_base_url", &jira_base_url)
+}
+
+#[tauri::command]
+pub fn get_jira_email(state: State<AppState>) -> Result<String, String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    Ok(queries::get_setting(&conn, "jira_email").unwrap_or_default())
+}
+
+#[tauri::command]
+pub fn save_jira_email(state: State<AppState>, jira_email: String) -> Result<(), String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    queries::set_setting(&conn, "jira_email", &jira_email)
+}
+
+#[tauri::command]
+pub fn get_jira_api_token(state: State<AppState>) -> Result<String, String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    Ok(queries::get_setting(&conn, "jira_api_token").unwrap_or_default())
+}
+
+#[tauri::command]
+pub fn save_jira_api_token(state: State<AppState>, jira_api_token: String) -> Result<(), String> {
+    let conn = state.db.lock().map_err(|e| e.to_string())?;
+    queries::set_setting(&conn, "jira_api_token", &jira_api_token)
 }

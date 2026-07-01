@@ -8,6 +8,7 @@ use tokio::sync::Semaphore;
 mod claude_invocation;
 mod commands;
 mod db;
+mod jira;
 mod models;
 mod phase_runner;
 
@@ -64,7 +65,7 @@ pub fn run() {
             commands::tasks::update_task,
             commands::tasks::delete_task,
             commands::jira::import_jira_task,
-            commands::jira::run_jira_diagnostic,
+            commands::jira::verify_jira_connection,
             commands::lge::run_lge_phase,
             commands::lge::load_lge_artifacts,
             commands::health::check_dependencies,
@@ -88,6 +89,10 @@ pub fn run() {
             commands::settings::save_shell_env,
             commands::settings::get_jira_base_url,
             commands::settings::save_jira_base_url,
+            commands::settings::get_jira_email,
+            commands::settings::save_jira_email,
+            commands::settings::get_jira_api_token,
+            commands::settings::save_jira_api_token,
             commands::attachments::add_task_attachment,
             commands::attachments::list_task_attachments,
             commands::attachments::remove_task_attachment,

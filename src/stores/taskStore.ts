@@ -18,7 +18,6 @@ interface TaskState {
   updateTask: (id: string, title: string, description?: string) => Promise<void>;
   deleteTask: (id: string) => Promise<string[]>;
   importJiraTask: (repositoryId: string, jiraKey: string) => Promise<void>;
-  runJiraDiagnostic: (repositoryId: string, jiraKey: string) => Promise<string>;
   createGitBranch: (
     taskId: string,
     repoPath: string,
@@ -121,10 +120,6 @@ export const useTaskStore = create<TaskState>((set) => ({
       console.error("Failed to import Jira task:", error);
       throw error;
     }
-  },
-
-  runJiraDiagnostic: async (repositoryId: string, jiraKey: string) => {
-    return api.runJiraDiagnostic(repositoryId, jiraKey);
   },
 
   createGitBranch: async (taskId, repoPath, branchName, baseBranch) => {

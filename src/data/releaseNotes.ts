@@ -1,5 +1,5 @@
 // Keep CURRENT_VERSION in sync with package.json, tauri.conf.json, and Cargo.toml
-export const CURRENT_VERSION = "0.7.1";
+export const CURRENT_VERSION = "0.8.0";
 export const WHATS_NEW_STORAGE_KEY = "lge_cockpit_seen_version";
 
 export type ReleaseFeatureIcon =
@@ -39,6 +39,16 @@ export interface ReleaseNote {
 }
 
 export const RELEASE_NOTES: ReleaseNote[] = [
+  {
+    version: "0.8.0",
+    titleKey: "whatsNew.releases.v080.title",
+    color: "accent",
+    features: [
+      { icon: "jira", labelKey: "whatsNew.releases.v080.f1" },
+      { icon: "settings", labelKey: "whatsNew.releases.v080.f2" },
+      { icon: "health", labelKey: "whatsNew.releases.v080.f3" },
+    ],
+  },
   {
     version: "0.7.1",
     titleKey: "whatsNew.releases.v071.title",

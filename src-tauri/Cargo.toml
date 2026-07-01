@@ -1,6 +1,6 @@
 [package]
 name = "lge-cockpit"
-version = "0.7.1"
+version = "0.8.0"
 description = "LGE Development Cockpit"
 authors = ["you"]
 license = "MIT"
@@ -28,3 +28,6 @@ rusqlite = { version = "0.32", features = ["bundled"] }
 uuid = { version = "1", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"] }
 tokio = { version = "1", features = ["sync", "macros", "rt"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+htmd = "0.5"
+thiserror = "1"
