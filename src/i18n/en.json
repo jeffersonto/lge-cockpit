@@ -212,6 +212,11 @@
   },
   "settings": {
     "title": "Settings",
+    "tabs": {
+      "model": "Model",
+      "jira": "Jira",
+      "environment": "Environment"
+    },
     "models": {
       "title": "Model per Phase",
       "description": "Choose which Claude model to use for each LGE process phase.",

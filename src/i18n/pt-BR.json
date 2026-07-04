@@ -212,6 +212,11 @@
   },
   "settings": {
     "title": "Configurações",
+    "tabs": {
+      "model": "Modelo",
+      "jira": "Jira",
+      "environment": "Ambiente"
+    },
     "models": {
       "title": "Modelo por Fase",
       "description": "Escolha qual modelo Claude será usado em cada fase do processo LGE.",
