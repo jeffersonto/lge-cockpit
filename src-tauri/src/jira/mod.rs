@@ -12,12 +12,17 @@ mod converter;
 
 pub use client::{JiraClient, ReqwestJiraClient};
 
-use crate::db::queries;
 use crate::models::TaskStatus;
 
 /// Jira Cloud connection parameters read from the app's settings table.
 /// All three fields are required for any API call to succeed.
-#[derive(Debug, Clone)]
+///
+/// `Serialize`/`Deserialize` (+ `#[serde(rename_all = "camelCase")]`) so the
+/// collapsed IPC command `save_jira_config` carries it end-to-end with the
+/// frontend. The type is owned by the Jira domain; construction from settings
+/// is owned by the [`crate::settings::Settings`] module.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct JiraConfig {
     /// Atlassian Cloud site URL, e.g. `https://yourcompany.atlassian.net`.
     /// Stored as `jira_base_url` in the settings table.
@@ -40,19 +45,6 @@ impl JiraConfig {
         !self.base_url.trim().is_empty()
             && !self.email.trim().is_empty()
             && !self.api_token.trim().is_empty()
-    }
-}
-
-/// Reads the Jira connection params (base URL, email, API token) from the
-/// settings table. All three fields are returned even when empty — the
-/// client constructor turns a missing trio into a clear `NotConfigured`
-/// error. Single source of truth shared by every call site that needs the
-/// configured Jira credentials.
-pub fn read_jira_config(conn: &rusqlite::Connection) -> JiraConfig {
-    JiraConfig {
-        base_url: queries::get_setting(conn, "jira_base_url").unwrap_or_default(),
-        email: queries::get_setting(conn, "jira_email").unwrap_or_default(),
-        api_token: queries::get_setting(conn, "jira_api_token").unwrap_or_default(),
     }
 }
 

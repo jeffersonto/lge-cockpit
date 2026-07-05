@@ -3,7 +3,7 @@ use tauri::State;
 use tauri_plugin_shell::ShellExt;
 
 use crate::commands::claude_utils::{resolve_claude_path, user_shell};
-use crate::jira;
+use crate::settings;
 use crate::AppState;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -66,7 +66,7 @@ pub async fn check_dependencies(
     // the live verify via `verify_jira_connection`.
     let jira_configured = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        jira::read_jira_config(&conn).is_complete()
+        settings::jira_config(&conn).is_complete()
     };
 
     deps.push(DependencyStatus {

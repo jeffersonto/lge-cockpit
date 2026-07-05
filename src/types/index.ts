@@ -154,3 +154,9 @@ export interface JiraSelf {
   display_name: string;
   email: string;
 }
+
+export interface JiraConfig {
+  baseUrl: string;
+  email: string;
+  apiToken: string;
+}

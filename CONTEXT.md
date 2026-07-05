@@ -2,6 +2,8 @@
 
 Domain glossary for LGE Cockpit. Canonical vocabulary for the domain; architecture vocabulary (module, interface, depth, seam, adapter, leverage, locality) lives in the `codebase-design` skill and is not duplicated here. Terms are added lazily as deepened modules are named and fuzzy concepts are sharpened.
 
+> Implemented: C05 (`Settings`, `ShellEnv`), C08 (`DiffAnalysis`), C07 (`CommitMessageRunner`, `Permission::None`, `ClaudeOutcome::result`) all landed 2026-07-04 with 48 new unit tests (40 → 88 total).
+
 ## LGE Phase
 
 One of the four sequential AI-powered phases executed per task: **planning → builder → review → guardian**.
@@ -106,3 +108,107 @@ _Avoid_: Jira diagnostic, MCP health check.
 ### Tests
 
 `#[cfg(test)]` in `phase_runner.rs`, run via `cargo test`. With three fake ports + in-memory SQLite + temp dirs, the whole orchestration is testable: queue acquire emits queued→dequeued; planning invokes with `Permission::Plan`; guardian updates status to `completed`; cancel-while-queued returns `PhaseRunError::Cancelled`; Claude failure returns `ClaudeFailed`; missing artifact returns `ArtifactMissing`; attachment context is merged into the prompt (asserted via a fake `ClaudeInvocation` that captures the request).
+
+---
+
+## Settings
+
+The deep module that owns all reads and writes of the app's key/value configuration (the SQLite `settings` table). Replaces the scattered `get_setting` / `set_setting` ad-hoc reads and the per-key pass-through Tauri commands. SQL itself stays in `db/queries.rs` (per AGENTS.md convention); Settings is the typed client above it. `get_setting` / `set_setting` are `pub(crate)` in `queries.rs` and used only by Settings.
+
+_Avoid_: settings helper, config service, preferences.
+
+### ShellEnv
+
+Value-object wrapping the user-customized shell prefix derived from the `shell_env` setting. Owns the parsing invariant — each non-comment, non-blank line terminated with `;` and the whole joined with a trailing `"; "` — so a caller receives "ready to prepend to a `bash -lc` string", not a raw setting value. `ShellEnv::from_raw(&str)` is public so the parser is unit-testable without SQLite; `ShellEnv::empty()` exists for fakes in tests of dependent modules.
+
+_Avoid_: shell prefix string, env prefix, shell config, raw shell_env.
+
+### Settings interface (decided 2026-07-04)
+
+```text
+pub struct ShellEnv(String);                     // value-object, see above
+
+Settings::jira_config(conn)            -> JiraConfig          // JiraConfig owned by jira/ module
+Settings::save_jira(conn, &JiraConfig) -> Result<(), String>
+Settings::shell_env(conn)              -> ShellEnv             // callers of subprocesses
+Settings::shell_env_raw(conn)          -> String                // UI edit field
+Settings::save_shell_env(conn, &str)   -> ()
+Settings::phase_model(conn, Phase)      -> String                // fallback to Phase::default_model()
+Settings::phase_models(conn)           -> HashMap<Phase,String> // all 4, fully resolved (for IPC)
+Settings::save_phase_models(conn, &HashMap<String,String>) -> Result<(), String>  // validates Phase + VALID_MODELS
+```
+
+- `JiraConfig` stays defined in `jira/mod.rs` (the Jira domain owns its credential shape); Settings imports it and gained `Serialize`/`Deserialize` (+ `#[serde(rename_all = "camelCase")]`) so the collapsed IPC command `save_jira_config` carries it end-to-end.
+- IPC collapse: 6 per-key Jira get/save commands → 2 (`get_jira_config`, `save_jira_config`). Frontend `settingsStore.ts` deletes `DEFAULT_MODELS` (the `get_phase_models` IPC now returns the full four-key map with fallback applied — single source of truth in Rust).
+
+_Avoid_: per-key settings commands, settings table readers scattered across modules.
+
+---
+
+## DiffAnalysis
+
+The deep module that owns the pure transformation of git diff outputs into an `ArchitectureDiff`. Lifts ~800 lines of pure parsers, file-tree builders, dependency-graph builders, and risk scoring out of `commands/arch_diff.rs` so the two `#[tauri::command]`s shrink to git-plumbing adapters that collect `name-status`, `numstat`, and full `diff` strings and hand them to `analyze`. Untracked-file line counting (`build_numstat_with_untracked`) stays in the adapter — `analyze` is pure (no filesystem).
+
+_Avoid_: arch diff service, diff parser, analyzer.
+
+### DiffAnalysis interface (decided 2026-07-04)
+
+```text
+pub struct AnalysisInput {
+    pub base: String,
+    pub head: String,
+    pub name_status: String,
+    pub numstat: String,
+    pub full_diff: String,
+    pub max_diff_bytes: usize,
+}
+
+pub struct DiffAnalysis {            // No `phase` field — that's an LGE concept, not a diff concept.
+    pub base_commit: String,
+    pub head_commit: String,
+    pub summary: ChangeSummary,
+    pub file_tree: Vec<FileNode>,
+    pub dependency_graph: DependencyGraph,
+    pub api_surface: Vec<ApiChange>,
+}
+
+pub fn analyze(input: &AnalysisInput) -> DiffAnalysis
+```
+
+- Parsers/helpers (`parse_name_status`, `parse_numstat`, `parse_diff_content`, `detect_import`, `detect_api_symbol`, `detect_new_dependencies`, `build_file_tree`, `build_dependency_graph`, `calculate_risk`, `extract_quoted`) are private; `MAX_MERMAID_NODES` is a private `const`. `max_diff_bytes` is injected (caller's call) — tests can pass a small cap to exercise truncation without producing 50KB of fixture.
+- Tests live in `#[cfg(test)]` inside the module, hitting helpers privately and `analyze` from outside; larger fixtures load via `include_str!` from `diff_analysis/fixtures/*.txt` so diffs with real newlines/escapes stay readable.
+- The command adapter wraps: sets `phase: String::new()` when constructing the IPC-bound `ArchitectureDiff` (the `phase` field is owned by the caller, not by DiffAnalysis).
+
+---
+
+## CommitMessageRunner
+
+The deep module that owns generating a Conventional Commit message for staged changes by invoking the Claude CLI. Replaces the hand-rolled `echo prompt | claude --print --model haiku` assembly duplicated in `commands/git.rs::generate_commit_message` and routes through the `ClaudeInvocation` port — making the seam real (second production caller besides `PhaseRunner`) and the JSON `result` extraction shared via `ClaudeOutcome::result()`.
+
+_Avoid_: commit message generator, claude commit service.
+
+### CommitMessageRunner interface (decided 2026-07-04)
+
+```text
+pub struct CommitMessageRunner<C: ClaudeInvocation> { claude: C }
+
+impl<C: ClaudeInvocation> CommitMessageRunner<C> {
+    pub fn new(claude: C) -> Self
+    pub async fn generate(&self, input: &CommitMessageInput) -> Result<String, String>
+}
+
+pub struct CommitMessageInput {
+    pub task_title: String,
+    pub scope: String,                // "" when no scope
+    pub diff_stat: String,
+    pub diff_preview: String,
+    pub working_dir: String,
+    pub env_prefix: ShellEnv,
+    pub model: String,
+}
+```
+
+- `Permission::None` (no `--permission-mode` flag) and `max_turns: Some(1)` are added to `ClaudeRequest`/`Permission`/`build_claude_command` so the commit-message invocation can opt out of permission flags and cap turns without forcing the same on `PhaseRunner`. `build_claude_command` emits `--max-turns N` when `Some`.
+- The commit-message prompt template stays inline in the runner (specific variables — `task_title`, `scope`, `diff_stat`, `diff_preview`, `Rules block` — don't fit `Phase::build_prompt`/`PromptContext`).
+- `ClaudeOutcome::result(&self) -> String` is the single place that parses the JSON `result` wrapper (with raw-stdout fallback); both `PhaseRunner::extract_artifact` and `CommitMessageRunner::generate` use it. Per-domain normalization (artifact content vs. first-line + scope fallback) stays in each caller.
+- The `#[tauri::command] generate_commit_message` in `commands/git.rs` becomes a thin adapter: resolves task_title + scope + working_dir + env_prefix from DB/git, runs `run_git` for `diff --cached --stat` and `diff --cached`, builds `CommitMessageInput`, constructs `CommitMessageRunner::new(RealClaudeInvocation::new(app))`, awaits `generate`.

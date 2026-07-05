@@ -2,8 +2,9 @@ use chrono::Utc;
 use tauri::State;
 use tauri_plugin_shell::ShellExt;
 
-use crate::commands::claude_utils::{resolve_claude_path, shell_env_prefix, shell_escape, user_shell};
+use crate::commands::claude_utils::{shell_escape, user_shell};
 use crate::db::queries;
+use crate::settings;
 use crate::AppState;
 
 fn now_rfc3339() -> String {
@@ -205,7 +206,7 @@ pub async fn open_in_editor(app: tauri::AppHandle, path: String) -> Result<(), S
 pub async fn get_current_git_branch(app: tauri::AppHandle, state: State<'_, AppState>, repo_path: String) -> Result<String, String> {
     let env_prefix = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        shell_env_prefix(&conn)
+        settings::shell_env(&conn).prefix().to_string()
     };
     run_git(&app, &repo_path, "rev-parse --abbrev-ref HEAD", &env_prefix).await
 }
@@ -224,7 +225,7 @@ pub async fn create_git_branch(
 ) -> Result<String, String> {
     let env_prefix = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        shell_env_prefix(&conn)
+        settings::shell_env(&conn).prefix().to_string()
     };
 
     // Fetch remote state for base branch
@@ -272,7 +273,7 @@ pub async fn commit_and_push(
 ) -> Result<String, String> {
     let (working_dir, env_prefix) = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        (queries::resolve_working_dir(&conn, &task_id)?, shell_env_prefix(&conn))
+        (queries::resolve_working_dir(&conn, &task_id)?, settings::shell_env(&conn).prefix().to_string())
     };
 
     let manual_commit = format!(
@@ -319,7 +320,7 @@ pub async fn create_pull_request(
 ) -> Result<String, String> {
     let (working_dir, env_prefix) = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        (queries::resolve_working_dir(&conn, &task_id)?, shell_env_prefix(&conn))
+        (queries::resolve_working_dir(&conn, &task_id)?, settings::shell_env(&conn).prefix().to_string())
     };
 
     let remote_url = run_git(&app, &working_dir, "remote get-url origin", &env_prefix).await?;
@@ -352,8 +353,10 @@ pub async fn create_pull_request(
     ))
 }
 
-/// Uses Claude CLI to generate a short conventional commit message based on the git diff.
-/// Resolves working directory from task (worktree or repo root).
+/// Generates a short conventional commit message via Claude CLI. Thin
+/// adapter: collects git diff strings + the configured shell env + the model
+/// resolved for the Builder phase, hands them to `CommitMessageRunner`, and
+/// returns the normalized message.
 #[tauri::command]
 pub async fn generate_commit_message(
     app: tauri::AppHandle,
@@ -362,14 +365,22 @@ pub async fn generate_commit_message(
     task_title: String,
     jira_key: Option<String>,
 ) -> Result<String, String> {
-    let (working_dir, env_prefix) = {
+    use crate::claude_invocation::RealClaudeInvocation;
+    use crate::commit_message_runner::{CommitMessageInput, CommitMessageRunner};
+    use crate::models::Phase;
+
+    let (working_dir, env_prefix, model) = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        (queries::resolve_working_dir(&conn, &task_id)?, shell_env_prefix(&conn))
+        (
+            queries::resolve_working_dir(&conn, &task_id)?,
+            settings::shell_env(&conn),
+            settings::phase_model(&conn, Phase::Builder),
+        )
     };
 
-    // Get a compact diff summary (stat + first 3000 chars of diff)
-    let diff_stat = run_git(&app, &working_dir, "diff --stat", &env_prefix).await.unwrap_or_default();
-    let diff_full = run_git(&app, &working_dir, "diff", &env_prefix).await.unwrap_or_default();
+    let env_prefix_str = env_prefix.prefix().to_string();
+    let diff_stat = run_git(&app, &working_dir, "diff --stat", &env_prefix_str).await.unwrap_or_default();
+    let diff_full = run_git(&app, &working_dir, "diff", &env_prefix_str).await.unwrap_or_default();
     let diff_preview: String = diff_full.chars().take(3000).collect();
 
     let scope = jira_key
@@ -377,68 +388,18 @@ pub async fn generate_commit_message(
         .map(|k| format!("({})", k))
         .unwrap_or_default();
 
-    let prompt = format!(
-        r#"Generate a single-line conventional commit message for the following changes.
-
-Task: {task_title}
-Format: feat{scope}: <short imperative description> (max 72 chars total)
-
-Changed files:
-{diff_stat}
-
-Diff preview:
-{diff_preview}
-
-Rules:
-- Output ONLY the commit message, nothing else
-- Use feat{scope}: prefix
-- Imperative mood (e.g. "add", "implement", "fix")
-- Max 72 characters
-- English"#,
-        task_title = task_title,
-        scope = scope,
-        diff_stat = diff_stat,
-        diff_preview = diff_preview,
-    );
-
-    let claude_bin = resolve_claude_path();
-    let shell = app.shell();
-    let cmd = format!(
-        "cd {} && echo {} | {} --print --model haiku --max-turns 1",
-        shell_escape(&working_dir),
-        shell_escape(&prompt),
-        claude_bin,
-    );
-
-    let output = shell
-        .command(&user_shell())
-        .args(["-l", "-i", "-c", &cmd])
-        .output()
+    let runner = CommitMessageRunner::new(RealClaudeInvocation::new(app));
+    runner
+        .generate(&CommitMessageInput {
+            task_title,
+            scope,
+            diff_stat,
+            diff_preview,
+            working_dir,
+            env_prefix,
+            model,
+        })
         .await
-        .map_err(|e| format!("Failed to invoke Claude CLI: {}", e))?;
-
-    if !output.status.success() {
-        return Err(String::from_utf8_lossy(&output.stderr).trim().to_string());
-    }
-
-    let raw = String::from_utf8_lossy(&output.stdout);
-
-    // Extract plain text — strip JSON wrapper if present
-    let message = if let Ok(v) = serde_json::from_str::<serde_json::Value>(&raw) {
-        v.get("result")
-            .and_then(|r| r.as_str())
-            .unwrap_or(raw.trim())
-            .to_string()
-    } else {
-        raw.trim().to_string()
-    };
-
-    // Guarantee it starts with the expected prefix as fallback
-    if message.is_empty() {
-        Ok(format!("feat{}: {}", scope, task_title))
-    } else {
-        Ok(message.lines().next().unwrap_or(&message).trim().to_string())
-    }
 }
 
 /// Removes the git worktree for a single task and clears worktree_path in DB.
@@ -458,7 +419,7 @@ pub async fn remove_worktree(
             )
             .map_err(|e| e.to_string())?;
         match wt {
-            Some(w) => (repo, w, shell_env_prefix(&conn)),
+            Some(w) => (repo, w, settings::shell_env(&conn).prefix().to_string()),
             None => return Ok(()), // no worktree to remove
         }
     };
@@ -534,7 +495,7 @@ pub async fn get_head_commit(
 ) -> Result<String, String> {
     let (working_dir, env_prefix) = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        (queries::resolve_working_dir(&conn, &task_id)?, shell_env_prefix(&conn))
+        (queries::resolve_working_dir(&conn, &task_id)?, settings::shell_env(&conn).prefix().to_string())
     };
     run_git(&app, &working_dir, "rev-parse HEAD", &env_prefix).await
 }
@@ -563,7 +524,7 @@ pub async fn remove_completed_worktrees(
         .map_err(|e| e.to_string())?
         .collect::<Result<Vec<_>, _>>()
         .map_err(|e| e.to_string())?;
-        (results, shell_env_prefix(&conn))
+        (results, settings::shell_env(&conn).prefix().to_string())
     };
 
     let mut removed = Vec::new();

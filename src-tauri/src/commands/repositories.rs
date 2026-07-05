@@ -53,7 +53,7 @@ pub async fn remove_repository(
         let conn = state.db.lock().map_err(|e| e.to_string())?;
         let repo_path = queries::get_repository_path(&conn, &id)?;
         let tasks = queries::get_tasks_for_repo_cleanup(&conn, &id)?;
-        let env_prefix = crate::commands::claude_utils::shell_env_prefix(&conn);
+        let env_prefix = crate::settings::shell_env(&conn).prefix().to_string();
         (repo_path, tasks, env_prefix)
     };
 

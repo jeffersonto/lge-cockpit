@@ -21,13 +21,18 @@ pub enum Phase {
 }
 
 /// Domain permission concept for a phase. Phase does NOT know CLI flag strings;
-/// translating `Permission::Plan` / `Permission::SkipPermissions` into
-/// `--permission-mode plan` / `--dangerously-skip-permissions` is the future
-/// ClaudeInvocation module's job.
+/// translating `Permission::Plan` / `Permission::SkipPermissions` /
+/// `Permission::None` into `--permission-mode plan` /
+/// `--dangerously-skip-permissions` / (no flag) is the ClaudeInvocation
+/// module's job.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Permission {
     Plan,
     SkipPermissions,
+    /// Emit no permission flag at all — used by callers outside the LGE
+    /// pipeline (e.g. `CommitMessageRunner`) that run Claude one-shot
+    /// without plan-mode or skip-permissions.
+    None,
 }
 
 /// Per-task substitution data for `Phase::build_prompt`. The fields always

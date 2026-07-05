@@ -6,11 +6,14 @@ use tauri::Manager;
 use tokio::sync::Semaphore;
 
 mod claude_invocation;
+mod commit_message_runner;
 mod commands;
 mod db;
+mod diff_analysis;
 mod jira;
 mod models;
 mod phase_runner;
+mod settings;
 
 pub struct AppState {
     pub db: Mutex<Connection>,
@@ -87,12 +90,8 @@ pub fn run() {
             commands::settings::save_phase_models,
             commands::settings::get_shell_env,
             commands::settings::save_shell_env,
-            commands::settings::get_jira_base_url,
-            commands::settings::save_jira_base_url,
-            commands::settings::get_jira_email,
-            commands::settings::save_jira_email,
-            commands::settings::get_jira_api_token,
-            commands::settings::save_jira_api_token,
+            commands::settings::get_jira_config,
+            commands::settings::save_jira_config,
             commands::attachments::add_task_attachment,
             commands::attachments::list_task_attachments,
             commands::attachments::remove_task_attachment,

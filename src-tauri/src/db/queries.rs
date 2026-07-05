@@ -7,7 +7,11 @@ use crate::models::{Repository, Task, TaskSource, TaskStatus};
 /// Reads a single setting value by key. Returns `None` when the row is
 /// missing or empty so callers can distinguish "unset" from "set but blank".
 /// The value is trimmed because the settings UI may persist stray whitespace.
-pub fn get_setting(conn: &Connection, key: &str) -> Option<String> {
+///
+/// `pub(crate)` — the typed seam is the [`crate::settings`] module. New
+/// settings should be exposed through a typed accessor there, not by reading
+/// this primitive directly.
+pub(crate) fn get_setting(conn: &Connection, key: &str) -> Option<String> {
     conn.query_row(
         "SELECT value FROM settings WHERE key = ?1",
         params![key],
@@ -20,7 +24,9 @@ pub fn get_setting(conn: &Connection, key: &str) -> Option<String> {
 /// Upserts a setting row by key. New rows are inserted; existing rows are
 /// updated in place. The `ON CONFLICT` clause keeps this a single statement
 /// regardless of whether the key already exists.
-pub fn set_setting(conn: &Connection, key: &str, value: &str) -> Result<(), String> {
+///
+/// `pub(crate)` — the typed seam is the [`crate::settings`] module.
+pub(crate) fn set_setting(conn: &Connection, key: &str, value: &str) -> Result<(), String> {
     conn.execute(
         "INSERT INTO settings (key, value) VALUES (?1, ?2) ON CONFLICT(key) DO UPDATE SET value = ?2",
         params![key, value],
