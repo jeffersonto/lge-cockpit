@@ -3,8 +3,9 @@ use tauri::State;
 use uuid::Uuid;
 
 use crate::db::queries;
-use crate::jira::{self, JiraClient, JiraError, JiraSelf, ReqwestJiraClient};
+use crate::jira::{JiraClient, JiraError, JiraSelf, ReqwestJiraClient};
 use crate::models::{Task, TaskSource};
+use crate::settings;
 use crate::AppState;
 
 /// Imports a Jira Cloud issue by key and creates a local `Task` from it.
@@ -24,7 +25,7 @@ pub async fn import_jira_task(
         let conn = state.db.lock().map_err(|e| e.to_string())?;
         // Validate the repository up front for a clear error.
         let _ = queries::get_repository_path(&conn, &repository_id)?;
-        jira::read_jira_config(&conn)
+        settings::jira_config(&conn)
     };
 
     let client = ReqwestJiraClient::new(config).map_err(|e| e.to_string())?;
@@ -62,7 +63,7 @@ pub async fn import_jira_task(
 pub async fn verify_jira_connection(state: State<'_, AppState>) -> Result<JiraSelf, String> {
     let config = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        jira::read_jira_config(&conn)
+        settings::jira_config(&conn)
     };
     let client = ReqwestJiraClient::new(config).map_err(|e| e.to_string())?;
     client

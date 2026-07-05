@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Repository, Task, CreateTaskInput, LgePhaseResult, HealthCheckResult, StaleWorktreeInfo, ArchitectureDiff, TaskAttachment, DeleteTaskResult, ProjectDeletePreview, JiraSelf } from "../types";
+import type { Repository, Task, CreateTaskInput, LgePhaseResult, HealthCheckResult, StaleWorktreeInfo, ArchitectureDiff, TaskAttachment, DeleteTaskResult, ProjectDeletePreview, JiraSelf, JiraConfig } from "../types";
 
 export async function listRepositories(): Promise<Repository[]> {
   return invoke("list_repositories");
@@ -170,28 +170,12 @@ export async function saveShellEnv(shellEnv: string): Promise<void> {
   return invoke("save_shell_env", { shellEnv });
 }
 
-export async function getJiraBaseUrl(): Promise<string> {
-  return invoke("get_jira_base_url");
+export async function getJiraConfig(): Promise<JiraConfig> {
+  return invoke("get_jira_config");
 }
 
-export async function saveJiraBaseUrl(jiraBaseUrl: string): Promise<void> {
-  return invoke("save_jira_base_url", { jiraBaseUrl });
-}
-
-export async function getJiraEmail(): Promise<string> {
-  return invoke("get_jira_email");
-}
-
-export async function saveJiraEmail(jiraEmail: string): Promise<void> {
-  return invoke("save_jira_email", { jiraEmail });
-}
-
-export async function getJiraApiToken(): Promise<string> {
-  return invoke("get_jira_api_token");
-}
-
-export async function saveJiraApiToken(jiraApiToken: string): Promise<void> {
-  return invoke("save_jira_api_token", { jiraApiToken });
+export async function saveJiraConfig(config: JiraConfig): Promise<void> {
+  return invoke("save_jira_config", { config });
 }
 
 export async function getHeadCommit(taskId: string): Promise<string> {

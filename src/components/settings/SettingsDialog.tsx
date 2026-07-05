@@ -23,12 +23,10 @@ interface SettingsDialogProps {
 export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
   const { t } = useTranslation();
   const {
-    phaseModels, shellEnv, jiraBaseUrl, jiraEmail, jiraApiToken, loaded,
+    phaseModels, shellEnv, jiraConfig, loaded,
     fetchPhaseModels, savePhaseModels,
     fetchShellEnv, saveShellEnv,
-    fetchJiraBaseUrl, saveJiraBaseUrl,
-    fetchJiraEmail, saveJiraEmail,
-    fetchJiraApiToken, saveJiraApiToken,
+    fetchJiraConfig, saveJiraConfig,
     verifyConnection,
   } = useSettingsStore();
 
@@ -36,9 +34,9 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
     ...phaseModels,
   });
   const [shellEnvDraft, setShellEnvDraft] = useState(shellEnv);
-  const [jiraBaseUrlDraft, setJiraBaseUrlDraft] = useState(jiraBaseUrl);
-  const [jiraEmailDraft, setJiraEmailDraft] = useState(jiraEmail);
-  const [jiraTokenDraft, setJiraTokenDraft] = useState(jiraApiToken);
+  const [jiraBaseUrlDraft, setJiraBaseUrlDraft] = useState(jiraConfig.baseUrl);
+  const [jiraEmailDraft, setJiraEmailDraft] = useState(jiraConfig.email);
+  const [jiraTokenDraft, setJiraTokenDraft] = useState(jiraConfig.apiToken);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [testing, setTesting] = useState(false);
@@ -50,25 +48,23 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
     if (open && !loaded) {
       fetchPhaseModels();
       fetchShellEnv();
-      fetchJiraBaseUrl();
-      fetchJiraEmail();
-      fetchJiraApiToken();
+      fetchJiraConfig();
     }
-  }, [open, loaded, fetchPhaseModels, fetchShellEnv, fetchJiraBaseUrl, fetchJiraEmail, fetchJiraApiToken]);
+  }, [open, loaded, fetchPhaseModels, fetchShellEnv, fetchJiraConfig]);
 
   useEffect(() => {
     if (open) {
       setDraft({ ...phaseModels });
       setShellEnvDraft(shellEnv);
-      setJiraBaseUrlDraft(jiraBaseUrl);
-      setJiraEmailDraft(jiraEmail);
-      setJiraTokenDraft(jiraApiToken);
+      setJiraBaseUrlDraft(jiraConfig.baseUrl);
+      setJiraEmailDraft(jiraConfig.email);
+      setJiraTokenDraft(jiraConfig.apiToken);
       setSaved(false);
       setTestResult(null);
       setError(null);
       setActiveTab("model");
     }
-  }, [open, phaseModels, shellEnv, jiraBaseUrl, jiraEmail, jiraApiToken]);
+  }, [open, phaseModels, shellEnv, jiraConfig]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -77,15 +73,20 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
     try {
       const modelsChanged = PHASES.some((p) => draft[p] !== phaseModels[p]);
       const shellEnvChanged = shellEnvDraft !== shellEnv;
-      const jiraBaseUrlChanged = jiraBaseUrlDraft.trim() !== jiraBaseUrl;
-      const jiraEmailChanged = jiraEmailDraft.trim() !== jiraEmail;
-      const jiraTokenChanged = jiraTokenDraft !== jiraApiToken;
+      const jiraDirty =
+        jiraBaseUrlDraft.trim() !== jiraConfig.baseUrl ||
+        jiraEmailDraft.trim() !== jiraConfig.email ||
+        jiraTokenDraft !== jiraConfig.apiToken;
 
       if (modelsChanged) await savePhaseModels(draft);
       if (shellEnvChanged) await saveShellEnv(shellEnvDraft);
-      if (jiraBaseUrlChanged) await saveJiraBaseUrl(jiraBaseUrlDraft.trim());
-      if (jiraEmailChanged) await saveJiraEmail(jiraEmailDraft.trim());
-      if (jiraTokenChanged) await saveJiraApiToken(jiraTokenDraft);
+      if (jiraDirty) {
+        await saveJiraConfig({
+          baseUrl: jiraBaseUrlDraft.trim(),
+          email: jiraEmailDraft.trim(),
+          apiToken: jiraTokenDraft,
+        });
+      }
 
       setSaved(true);
       setTimeout(() => onClose(), 800);
@@ -101,9 +102,17 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
     setTestResult(null);
     setError(null);
     try {
-      if (jiraBaseUrlDraft.trim() !== jiraBaseUrl) await saveJiraBaseUrl(jiraBaseUrlDraft.trim());
-      if (jiraEmailDraft.trim() !== jiraEmail) await saveJiraEmail(jiraEmailDraft.trim());
-      if (jiraTokenDraft !== jiraApiToken) await saveJiraApiToken(jiraTokenDraft);
+      const jiraDirty =
+        jiraBaseUrlDraft.trim() !== jiraConfig.baseUrl ||
+        jiraEmailDraft.trim() !== jiraConfig.email ||
+        jiraTokenDraft !== jiraConfig.apiToken;
+      if (jiraDirty) {
+        await saveJiraConfig({
+          baseUrl: jiraBaseUrlDraft.trim(),
+          email: jiraEmailDraft.trim(),
+          apiToken: jiraTokenDraft,
+        });
+      }
 
       const self = await verifyConnection();
       setTestResult(`✓ ${self.display_name}${self.email ? ` <${self.email}>` : ""}`);
@@ -117,9 +126,9 @@ export function SettingsDialog({ open, onClose }: SettingsDialogProps) {
 
   const modeloDirty = PHASES.some((p) => draft[p] !== phaseModels[p]);
   const jiraDirty =
-    jiraBaseUrlDraft.trim() !== jiraBaseUrl ||
-    jiraEmailDraft.trim() !== jiraEmail ||
-    jiraTokenDraft !== jiraApiToken;
+    jiraBaseUrlDraft.trim() !== jiraConfig.baseUrl ||
+    jiraEmailDraft.trim() !== jiraConfig.email ||
+    jiraTokenDraft !== jiraConfig.apiToken;
   const ambienteDirty = shellEnvDraft !== shellEnv;
   const hasChanges = modeloDirty || jiraDirty || ambienteDirty;
   const tabDirty: Record<TabId, boolean> = {

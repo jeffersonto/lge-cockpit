@@ -24,9 +24,9 @@ use rusqlite::Connection;
 use tokio::sync::Semaphore;
 
 use crate::claude_invocation::{ClaudeInvocation, ClaudeProcess, ClaudeRequest};
-use crate::commands::claude_utils::shell_env_prefix;
 use crate::db::queries;
 use crate::models::{Phase, PromptContext};
+use crate::settings;
 
 // ---- Public value types ----
 
@@ -232,7 +232,7 @@ impl<'a, C: ClaudeInvocation, E: EventEmitter, W: WorktreeProvisioner> PhaseRunn
             let repo_path = queries::get_repository_path(&conn, &task.0)
                 .map_err(PhaseRunError::Db)?;
             let code = task.1.unwrap_or_else(|| ctx.task_id[..8].to_string());
-            let model = read_phase_model(&conn, phase);
+            let model = settings::phase_model(&conn, phase);
             (repo_path, code, model, task.0, task.3)
         };
 
@@ -241,7 +241,7 @@ impl<'a, C: ClaudeInvocation, E: EventEmitter, W: WorktreeProvisioner> PhaseRunn
             let conn = self.db.lock().map_err(|e| PhaseRunError::Db(e.to_string()))?;
             (
                 queries::resolve_working_dir(&conn, &ctx.task_id).map_err(PhaseRunError::Db)?,
-                shell_env_prefix(&conn),
+                settings::shell_env(&conn).prefix().to_string(),
             )
         };
 
@@ -317,6 +317,7 @@ impl<'a, C: ClaudeInvocation, E: EventEmitter, W: WorktreeProvisioner> PhaseRunn
                 model: phase_model,
                 permission: plan.permission,
                 env_prefix: env_prefix.clone(),
+                max_turns: None,
             })
             .map_err(PhaseRunError::Io)?;
 
@@ -340,7 +341,7 @@ impl<'a, C: ClaudeInvocation, E: EventEmitter, W: WorktreeProvisioner> PhaseRunn
         let artifact_path = format!("{}/{}", artifacts_dir, plan.filename);
         let artifact_content = if phase == Phase::Planning {
             let content = resolve_plan_file(&out.stdout)
-                .unwrap_or_else(|| extract_artifact(&out.stdout));
+                .unwrap_or_else(|| out.result());
             std::fs::write(&artifact_path, &content)
                 .map_err(|e| PhaseRunError::Io(e.to_string()))?;
             content
@@ -393,28 +394,7 @@ impl Drop for PidGuard<'_> {
     }
 }
 
-// ---- Private helpers (moved from lge.rs; single read site until Settings module) ----
-
-/// Reads the user-configured model override for a phase, falling back to the
-/// phase's static default. Will be owned by the future Settings module (C05).
-fn read_phase_model(conn: &Connection, phase: Phase) -> String {
-    let key = format!("model_{}", phase.as_str());
-    conn.query_row(
-        "SELECT value FROM settings WHERE key = ?1",
-        rusqlite::params![key],
-        |row| row.get::<_, String>(0),
-    )
-    .unwrap_or_else(|_| phase.default_model().to_string())
-}
-
-fn extract_artifact(claude_output: &str) -> String {
-    if let Ok(wrapper) = serde_json::from_str::<serde_json::Value>(claude_output) {
-        if let Some(result) = wrapper.get("result").and_then(|r| r.as_str()) {
-            return result.to_string();
-        }
-    }
-    claude_output.trim().to_string()
-}
+// ---- Private helpers (moved from lge.rs) ----
 
 /// TODO(race): scans `~/.claude/plans/` for the most-recent `.md` modified in
 /// the last 5 minutes. Two plannings within 5 min on one machine can land the

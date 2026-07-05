@@ -80,7 +80,7 @@ pub async fn delete_task(
 
     let env_prefix = {
         let conn = state.db.lock().map_err(|e| e.to_string())?;
-        crate::commands::claude_utils::shell_env_prefix(&conn)
+        crate::settings::shell_env(&conn).prefix().to_string()
     };
 
     let mut worktree_cleaned = false;
