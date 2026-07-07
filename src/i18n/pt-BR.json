@@ -173,14 +173,14 @@
       "changeMode": "Trocar modo"
     },
     "branch": {
-      "title": "Branch Git",
-      "create": "Criar Branch",
-      "dialogTitle": "Criar Branch Git",
-      "nameLabel": "Nome da branch",
-      "baseLabel": "Branch base",
-      "baseHint": "A branch base será atualizada com pull antes de criar a nova branch. Padrão: develop.",
+      "title": "Área de Trabalho",
+      "create": "Criar Área de Trabalho",
+      "dialogTitle": "Criar Área de Trabalho",
+      "nameLabel": "Nome da Área de Trabalho",
+      "baseLabel": "Ponto de partida",
+      "baseHint": "Vamos atualizar com a versão mais recente do projeto antes de criar sua Área de Trabalho. Padrão: develop.",
       "creating": "Criando...",
-      "confirm": "Criar Branch"
+      "confirm": "Criar Área de Trabalho"
     },
     "worktree": {
       "active": "Worktree ativo",

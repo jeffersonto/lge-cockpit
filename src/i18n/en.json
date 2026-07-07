@@ -173,14 +173,14 @@
       "changeMode": "Change mode"
     },
     "branch": {
-      "title": "Git Branch",
-      "create": "Create Branch",
-      "dialogTitle": "Create Git Branch",
-      "nameLabel": "Branch name",
-      "baseLabel": "Base branch",
-      "baseHint": "The branch will be pulled and updated before the new branch is created. Default: develop.",
+      "title": "Task Workspace",
+      "create": "Create Workspace",
+      "dialogTitle": "Create Task Workspace",
+      "nameLabel": "Workspace name",
+      "baseLabel": "Starting point",
+      "baseHint": "We'll update to the project's latest version before creating your Workspace. Default: develop.",
       "creating": "Creating...",
-      "confirm": "Create Branch"
+      "confirm": "Create Workspace"
     },
     "worktree": {
       "active": "Worktree active",

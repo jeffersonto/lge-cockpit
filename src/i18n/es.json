@@ -173,14 +173,14 @@
       "changeMode": "Cambiar modo"
     },
     "branch": {
-      "title": "Rama Git",
-      "create": "Crear Rama",
-      "dialogTitle": "Crear Rama Git",
-      "nameLabel": "Nombre de la rama",
-      "baseLabel": "Rama base",
-      "baseHint": "La rama base se actualizará con pull antes de crear la nueva rama. Por defecto: develop.",
+      "title": "Espacio de Trabajo",
+      "create": "Crear Espacio de Trabajo",
+      "dialogTitle": "Crear Espacio de Trabajo",
+      "nameLabel": "Nombre del Espacio de Trabajo",
+      "baseLabel": "Punto de partida",
+      "baseHint": "Actualizaremos a la versión más reciente del proyecto antes de crear tu Espacio de Trabajo. Por defecto: develop.",
       "creating": "Creando...",
-      "confirm": "Crear Rama"
+      "confirm": "Crear Espacio de Trabajo"
     },
     "worktree": {
       "active": "Worktree activo",
