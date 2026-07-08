@@ -67,15 +67,15 @@ PhaseRunner owns artifact **retrieval** (decided during the `Phase` grilling —
 
 ## Task Workspace
 
-The folder + isolated git working tree where a task's code changes live during development (backed internally by `WorktreeProvisioner` / `task.worktree_path`). Surfaced to non-technical users in the UI as **"Área de Trabalho"** — the rename is UI copy only, no change to the underlying data model or Rust-side naming (`worktree` stays the term in code, migrations, and `CONTEXT.md`'s `PhaseRunner` section above).
+The git branch created per task (`task.git_branch`), surfaced to non-technical users as **"Área de Trabalho"** (English/Spanish glossary: "Task Workspace" / "Espacio de Trabajo"); the action that creates it is labeled **"Criar Área de Trabalho"** (was "Criar Branch"). The badge still displays the raw branch name (e.g. `feature/oauth2-login`) — only the surrounding label changes, not the value. This is a **2026-07-07 reversal** of the original ADR 002 mapping (superseded by ADR 003), which had assigned "Área de Trabalho" to the worktree instead — see [[Task Isolated Environment]] for the other half of the swap.
+
+_Avoid_ (in user-facing copy only): Branch, Git Branch, Registro de Trabalho (retired 2026-07-07).
+
+## Task Isolated Environment
+
+The folder + isolated git working tree where a task's code changes live during development (backed internally by `WorktreeProvisioner` / `task.worktree_path`). Surfaced to non-technical users in the UI as **"Ambiente Isolado"** (English/Spanish glossary: "Isolated Environment" / "Entorno Aislado") — the rename is UI copy only, no change to the underlying data model or Rust-side naming (`worktree` stays the term in code, migrations, and `CONTEXT.md`'s `PhaseRunner` section above). Formerly labeled "Área de Trabalho" under ADR 002 (superseded); see [[Task Workspace]] above for the other half of the 2026-07-07 swap.
 
 _Avoid_ (in user-facing copy only): Worktree, workspace folder.
-
-## Task Work Record
-
-The git branch created per task (`task.git_branch`), surfaced to non-technical users as **"Registro de Trabalho"**; the action that creates it is labeled **"Iniciar Registro"** (was "Criar Branch"). The badge still displays the raw branch name (e.g. `feature/oauth2-login`) — only the surrounding label changes, not the value.
-
-_Avoid_ (in user-facing copy only): Branch, Git Branch.
 
 ## Task Review Request
 
