@@ -235,7 +235,7 @@
     "saved": "Settings saved!",
     "shellEnv": {
       "title": "Shell Environment",
-      "description": "Commands to run before every Cockpit operation (git, Claude CLI, etc). One command per line. Lines starting with # are ignored.",
+      "description": "Commands to run before every Cockpit operation (git, Claude CLI, etc). One command per line. Lines starting with # are ignored.\n\nIf your project needs specific tool versions to run, paste the commands here. If you're not sure what this means, you can leave it blank or ask whoever set up the project.",
       "placeholder": "# Example:\nunset GOROOT\nnvm use 18\npyenv shell 3.11"
     },
     "jira": {
