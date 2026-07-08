@@ -219,9 +219,9 @@
     },
     "models": {
       "title": "Model per Phase",
-      "description": "Choose which Claude model to use for each LGE process phase.",
+      "description": "Choose which AI model to use for each Development step.",
       "planning": "Planning",
-      "builder": "Builder",
+      "builder": "Building",
       "review": "Review",
       "guardian": "Guardian",
       "opus": "Opus",
