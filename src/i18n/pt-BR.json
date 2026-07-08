@@ -88,10 +88,10 @@
     "title": "Desenvolvimento",
     "processComplete": "Desenvolvimento concluído!",
     "phase": {
-      "planning": "Planning",
-      "builder": "Builder",
-      "review": "Review",
-      "guardian": "Guardian"
+      "planning": "Planejamento",
+      "builder": "Construção",
+      "review": "Revisão",
+      "guardian": "Guardião"
     },
     "status": {
       "pending": "Aguardando",
