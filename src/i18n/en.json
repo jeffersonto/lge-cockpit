@@ -8,7 +8,7 @@
     "noRepos": "No repositories added"
   },
   "topbar": {
-    "noProcesses": "No active LGE processes"
+    "noProcesses": "No Development in progress"
   },
   "tasks": {
     "title": "Tasks",
@@ -85,8 +85,8 @@
     "verifying": "Checking"
   },
   "lge": {
-    "title": "LGE Process",
-    "processComplete": "LGE process completed!",
+    "title": "Development",
+    "processComplete": "Development completed!",
     "phase": {
       "planning": "Planning",
       "builder": "Builder",
