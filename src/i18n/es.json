@@ -161,7 +161,7 @@
   },
   "git": {
     "commit": {
-      "messageLabel": "Mensaje de commit",
+      "messageLabel": "Descripción de la Aprobación",
       "manual": "Escribir manualmente",
       "manualHint": "Tú escribes el mensaje",
       "ai": "Generar con IA ✨",
@@ -197,14 +197,14 @@
       "staleAlert": "Tienes {{count}} Entorno(s) Aislado(s) de tareas completadas hace más de 7 días"
     },
     "pr": {
-      "panelTitle": "Listo para Pull Request",
+      "panelTitle": "Listo para Aprobación",
       "titleLabel": "Título del PR",
       "titlePlaceholder": "Describe los cambios...",
       "bodyLabel": "Descripción del PR",
       "bodyPlaceholder": "Resumen de lo implementado...",
-      "commitAndOpen": "Commit, Push & Abrir PR",
+      "commitAndOpen": "Enviar para Aprobación",
       "loading": "Procesando...",
-      "success": "¡Pull request creado con éxito!",
+      "success": "¡Aprobación enviada con éxito!",
       "manualHint": "Ejecute manualmente en la terminal:",
       "copyCommand": "Copiar comando",
       "copied": "¡Copiado!"

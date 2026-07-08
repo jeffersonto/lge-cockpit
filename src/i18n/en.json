@@ -161,7 +161,7 @@
   },
   "git": {
     "commit": {
-      "messageLabel": "Commit message",
+      "messageLabel": "Approval Description",
       "manual": "Write manually",
       "manualHint": "You write the message",
       "ai": "Generate with AI ✨",
@@ -197,14 +197,14 @@
       "staleAlert": "You have {{count}} stale Isolated Environment(s) from completed tasks"
     },
     "pr": {
-      "panelTitle": "Ready for Pull Request",
+      "panelTitle": "Ready for Approval",
       "titleLabel": "PR title",
       "titlePlaceholder": "Describe the changes...",
       "bodyLabel": "PR description",
       "bodyPlaceholder": "Summary of what was implemented...",
-      "commitAndOpen": "Commit, Push & Open PR",
+      "commitAndOpen": "Send for Approval",
       "loading": "Processing...",
-      "success": "Pull request created successfully!",
+      "success": "Approval sent successfully!",
       "manualHint": "Run manually in the terminal:",
       "copyCommand": "Copy command",
       "copied": "Copied!"
