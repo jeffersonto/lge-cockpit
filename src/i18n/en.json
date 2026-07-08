@@ -18,10 +18,10 @@
     "emptyHint": "Create a new task or import from Jira",
     "deleteConfirm": "Are you sure you want to delete this task?",
     "deleteTitle": "Delete task?",
-    "deleteWarningWorktree": "The active worktree will be removed from disk.",
-    "deleteWarningBranch": "Branch \"{{branch}}\" will be deleted.",
+    "deleteWarningWorktree": "The active Isolated Environment will be removed from disk.",
+    "deleteWarningBranch": "Workspace \"{{branch}}\" will be removed.",
     "deletionPartialError": "Task deleted, but some resources could not be removed:",
-    "deleteDisabledRunning": "Cancel the running LGE phase before deleting",
+    "deleteDisabledRunning": "Cancel the running Development step before deleting",
     "filter": {
       "placeholder": "Search by title or Jira key...",
       "noResults": "No tasks match the filter"
@@ -357,6 +357,6 @@
   },
   "repos": {
     "deleteTitle": "Remove repository?",
-    "deleteStats": "{{tasks}} task(s) · {{worktrees}} worktree(s) · {{branches}} branch(es) will be removed."
+    "deleteStats": "{{tasks}} task(s) · {{worktrees}} Isolated Environment(s) · {{branches}} Workspace(s) will be removed."
   }
 }

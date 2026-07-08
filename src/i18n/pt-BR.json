@@ -18,10 +18,10 @@
     "emptyHint": "Crie uma nova tarefa ou importe do Jira",
     "deleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
     "deleteTitle": "Excluir tarefa?",
-    "deleteWarningWorktree": "O worktree ativo será removido do disco.",
-    "deleteWarningBranch": "A branch \"{{branch}}\" será deletada.",
+    "deleteWarningWorktree": "O Ambiente Isolado ativo será removido do disco.",
+    "deleteWarningBranch": "A Área de Trabalho \"{{branch}}\" será removida.",
     "deletionPartialError": "Tarefa excluída, mas alguns recursos não puderam ser removidos:",
-    "deleteDisabledRunning": "Cancele a fase LGE em execução antes de excluir",
+    "deleteDisabledRunning": "Cancele a etapa de Desenvolvimento em execução antes de excluir",
     "filter": {
       "placeholder": "Buscar por título ou chave Jira...",
       "noResults": "Nenhuma tarefa corresponde ao filtro"
@@ -357,6 +357,6 @@
   },
   "repos": {
     "deleteTitle": "Remover repositório?",
-    "deleteStats": "{{tasks}} tarefa(s) · {{worktrees}} worktree(s) · {{branches}} branch(es) serão removidos."
+    "deleteStats": "{{tasks}} tarefa(s) · {{worktrees}} Ambiente(s) Isolado(s) · {{branches}} Área(s) de Trabalho serão removidas."
   }
 }
