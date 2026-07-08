@@ -132,10 +132,10 @@
         "fileTree": "File Impact Tree",
         "expandAll": "Expand all",
         "collapseAll": "Collapse all",
-        "depGraph": "Dependency Graph",
-        "depGraphEmpty": "No dependency changes detected",
-        "apiSurface": "API Surface Changes",
-        "apiSurfaceEmpty": "No public API changes detected",
+        "depGraph": "Connection Map",
+        "depGraphEmpty": "No connections between parts of the system changed",
+        "apiSurface": "External Touchpoints",
+        "apiSurfaceEmpty": "No external touchpoints changed",
         "timeline": "Phase Comparison",
         "timelineEmpty": "Run more phases to compare",
         "added": "added",
@@ -145,12 +145,12 @@
         "riskMedium": "Medium",
         "riskHigh": "High",
         "riskCritical": "Critical",
-        "analyzeBtn": "Analyze Architectural Impact",
+        "analyzeBtn": "Analyze System Impact",
         "analyzing": "Analyzing...",
         "reanalyze": "Re-analyze",
-        "emptyTitle": "Architectural Impact Analysis",
-        "emptyDesc": "See which modules were affected, new dependencies introduced, and the blast radius of this phase.",
-        "emptyHint": "Fast · Offline · Based on git diff"
+        "emptyTitle": "System Impact Analysis",
+        "emptyDesc": "See which parts of the system were affected, new connections created, and the size of this phase's impact.",
+        "emptyHint": "Fast · Offline · Based on the code that changed"
       }
     },
     "context": {

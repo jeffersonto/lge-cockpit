@@ -131,11 +131,11 @@
         "riskScore": "Riesgo",
         "fileTree": "Árbol de Cambios",
         "expandAll": "Expandir todo",
-        "collapseAll": "Colapsar todo",
-        "depGraph": "Grafo de Dependencias",
-        "depGraphEmpty": "No se detectaron cambios de dependencias",
-        "apiSurface": "Superficie de API",
-        "apiSurfaceEmpty": "No se detectaron cambios de API pública",
+        "collapseAll": "Contraer todo",
+        "depGraph": "Mapa de Conexiones",
+        "depGraphEmpty": "Ninguna conexión entre partes del sistema fue modificada",
+        "apiSurface": "Puntos de Contacto Externo",
+        "apiSurfaceEmpty": "Ningún punto de contacto externo fue modificado",
         "timeline": "Comparación entre Fases",
         "timelineEmpty": "Ejecute más fases para comparar",
         "added": "agregado",
@@ -145,12 +145,12 @@
         "riskMedium": "Medio",
         "riskHigh": "Alto",
         "riskCritical": "Crítico",
-        "analyzeBtn": "Analizar Impacto Arquitectural",
+        "analyzeBtn": "Analizar Impacto en el Sistema",
         "analyzing": "Analizando...",
         "reanalyze": "Reanalizar",
-        "emptyTitle": "Análisis de Impacto Arquitectural",
-        "emptyDesc": "Vea qué módulos fueron afectados, nuevas dependencias introducidas y el radio de impacto de esta fase.",
-        "emptyHint": "Rápido · Offline · Basado en git diff"
+        "emptyTitle": "Análisis de Impacto en el Sistema",
+        "emptyDesc": "Vea qué partes del sistema fueron afectados, nuevas conexiones creadas y el tamaño del impacto de esta fase.",
+        "emptyHint": "Rápido · Offline · Basado en el código modificado"
       }
     },
     "context": {
