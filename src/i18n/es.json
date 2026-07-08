@@ -258,6 +258,12 @@
     "close": "Cerrar",
     "latest": "Actual",
     "releases": {
+      "v090": {
+        "title": "v0.9.0 — Lenguaje Simplificado",
+        "f1": "Términos técnicos como branch, worktree y pull request pasaron a ser Espacio de Trabajo, Entorno Aislado y Aprobación en las pantallas de uso diario",
+        "f2": "El panel de Diff de Arquitectura usa lenguaje simple: Mapa de Conexiones y Puntos de Contacto Externo reemplazan a Dependency Graph y API Surface",
+        "f3": "Configuración de Jira y Entorno con explicaciones en lenguaje simple; el token de API ahora se llama Clave de Acceso"
+      },
       "v080": {
         "title": "v0.8.0 — API directa de Jira",
         "f1": "La importación de Jira ahora usa la API REST de Atlassian directamente — sin MCP ni Claude CLI",

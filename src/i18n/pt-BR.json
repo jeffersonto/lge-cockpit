@@ -258,6 +258,12 @@
     "close": "Fechar",
     "latest": "Atual",
     "releases": {
+      "v090": {
+        "title": "v0.9.0 — Linguagem Simplificada",
+        "f1": "Termos técnicos como branch, worktree e pull request viraram Área de Trabalho, Ambiente Isolado e Aprovação nas telas de uso diário",
+        "f2": "Painel de Diff de Arquitetura com linguagem acessível: Mapa de Conexões e Pontos de Contato Externo substituem Dependency Graph e API Surface",
+        "f3": "Configurações Jira e Ambiente com explicações em linguagem simples; token de API agora é Chave de Acesso"
+      },
       "v080": {
         "title": "v0.8.0 — API direta do Jira",
         "f1": "Importação do Jira agora usa a API REST da Atlassian diretamente — sem MCP nem Claude CLI",
