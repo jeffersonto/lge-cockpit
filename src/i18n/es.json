@@ -183,18 +183,18 @@
       "confirm": "Crear Espacio de Trabajo"
     },
     "worktree": {
-      "active": "Worktree activo",
-      "remove": "Eliminar worktree",
+      "active": "Entorno Aislado",
+      "remove": "Eliminar Entorno Aislado",
       "openInIde": "Abrir en VS Code",
       "copyPath": "Copiar ruta",
-      "copied": "Copiado!",
-      "cleanCompleted": "Limpiar worktrees completadas",
+      "copied": "¡Copiado!",
+      "cleanCompleted": "Limpiar Entornos Aislados de tareas completadas",
       "cleanAll": "Limpiar todo",
       "cleaning": "Limpiando...",
-      "cleaned": "Worktree eliminado con éxito",
-      "cleanupAfterPr": "Limpiar worktree",
-      "limitReached": "Límite de worktrees alcanzado",
-      "staleAlert": "Tienes {{count}} worktree(s) de tareas completadas hace más de 7 días"
+      "cleaned": "Entorno Aislado eliminado con éxito",
+      "cleanupAfterPr": "Limpiar Entorno Aislado",
+      "limitReached": "Límite de Entornos Aislados alcanzado",
+      "staleAlert": "Tienes {{count}} Entorno(s) Aislado(s) de tareas completadas hace más de 7 días"
     },
     "pr": {
       "panelTitle": "Listo para Pull Request",

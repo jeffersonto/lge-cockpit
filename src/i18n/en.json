@@ -183,18 +183,18 @@
       "confirm": "Create Workspace"
     },
     "worktree": {
-      "active": "Worktree active",
-      "remove": "Remove worktree",
+      "active": "Isolated Environment",
+      "remove": "Remove Isolated Environment",
       "openInIde": "Open in VS Code",
       "copyPath": "Copy path",
       "copied": "Copied!",
-      "cleanCompleted": "Clean completed worktrees",
+      "cleanCompleted": "Clean up Isolated Environments from completed tasks",
       "cleanAll": "Clean all",
       "cleaning": "Cleaning...",
-      "cleaned": "Worktree removed successfully",
-      "cleanupAfterPr": "Clean up worktree",
-      "limitReached": "Worktree limit reached",
-      "staleAlert": "You have {{count}} stale worktree(s) from completed tasks"
+      "cleaned": "Isolated Environment removed successfully",
+      "cleanupAfterPr": "Clean up Isolated Environment",
+      "limitReached": "Isolated Environment limit reached",
+      "staleAlert": "You have {{count}} stale Isolated Environment(s) from completed tasks"
     },
     "pr": {
       "panelTitle": "Ready for Pull Request",

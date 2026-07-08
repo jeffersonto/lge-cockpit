@@ -183,18 +183,18 @@
       "confirm": "Criar Área de Trabalho"
     },
     "worktree": {
-      "active": "Worktree ativo",
-      "remove": "Remover worktree",
+      "active": "Ambiente Isolado",
+      "remove": "Remover Ambiente Isolado",
       "openInIde": "Abrir no VS Code",
       "copyPath": "Copiar caminho",
       "copied": "Copiado!",
-      "cleanCompleted": "Limpar worktrees concluídas",
+      "cleanCompleted": "Limpar Ambientes Isolados de tarefas concluídas",
       "cleanAll": "Limpar tudo",
       "cleaning": "Limpando...",
-      "cleaned": "Worktree removido com sucesso",
-      "cleanupAfterPr": "Limpar worktree",
-      "limitReached": "Limite de worktrees atingido",
-      "staleAlert": "Você tem {{count}} worktree(s) de tarefas concluídas há mais de 7 dias"
+      "cleaned": "Ambiente Isolado removido com sucesso",
+      "cleanupAfterPr": "Limpar Ambiente Isolado",
+      "limitReached": "Limite de Ambientes Isolados atingido",
+      "staleAlert": "Você tem {{count}} Ambiente(s) Isolado(s) de tarefas concluídas há mais de 7 dias"
     },
     "pr": {
       "panelTitle": "Pronto para Pull Request",
