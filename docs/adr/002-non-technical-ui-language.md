@@ -4,7 +4,7 @@ ADR Number: 002
 Title: Non-Technical Language for Daily-Use UI
 Date: 2026-07-06
 Responsible: LGE Cockpit Team
-Status: Accepted
+Status: Superseded by ADR 003
 
 ## Context
 
