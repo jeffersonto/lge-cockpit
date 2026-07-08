@@ -221,7 +221,7 @@
       "title": "Model per Phase",
       "description": "Choose which AI model to use for each Development step.",
       "planning": "Planning",
-      "builder": "Building",
+      "builder": "Builder",
       "review": "Review",
       "guardian": "Guardian",
       "opus": "Opus",
