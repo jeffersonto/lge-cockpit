@@ -245,9 +245,9 @@
       "baseUrlPlaceholder": "https://tuempresa.atlassian.net",
       "email": "Email",
       "emailPlaceholder": "tu@tuempresa.com",
-      "apiToken": "Token de API",
-      "apiTokenPlaceholder": "Genera uno en la configuración de la cuenta Atlassian → Seguridad → Crear y gestionar tokens de API",
-      "apiTokenHint": "Crea un token de API en tu cuenta Atlassian → Seguridad → Tokens de API.",
+      "apiToken": "Clave de Acceso",
+      "apiTokenPlaceholder": "Genera una en la configuración de la cuenta Atlassian → Seguridad → Crear y gestionar tokens de API",
+      "apiTokenHint": "Crea una Clave de Acceso en tu cuenta Atlassian → Seguridad → Tokens de API.",
       "testConnection": "Probar conexión",
       "testing": "Probando..."
     }

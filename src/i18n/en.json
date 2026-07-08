@@ -245,9 +245,9 @@
       "baseUrlPlaceholder": "https://yourcompany.atlassian.net",
       "email": "Email",
       "emailPlaceholder": "you@yourcompany.com",
-      "apiToken": "API token",
+      "apiToken": "Access Key",
       "apiTokenPlaceholder": "Generate one at Atlassian account settings → Security → Create and manage API tokens",
-      "apiTokenHint": "Create an API token in your Atlassian account → Security → API tokens.",
+      "apiTokenHint": "Create an Access Key in your Atlassian account → Security → API tokens.",
       "testConnection": "Test connection",
       "testing": "Testing..."
     }
