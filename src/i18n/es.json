@@ -149,7 +149,7 @@
         "analyzing": "Analizando...",
         "reanalyze": "Reanalizar",
         "emptyTitle": "Análisis de Impacto en el Sistema",
-        "emptyDesc": "Vea qué partes del sistema fueron afectados, nuevas conexiones creadas y el tamaño del impacto de esta fase.",
+        "emptyDesc": "Vea qué partes del sistema fueron afectadas, nuevas conexiones creadas y el tamaño del impacto de esta fase.",
         "emptyHint": "Rápido · Offline · Basado en el código modificado"
       }
     },
