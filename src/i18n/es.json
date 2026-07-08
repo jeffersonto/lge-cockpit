@@ -163,11 +163,11 @@
     "commit": {
       "messageLabel": "Descripción de la Aprobación",
       "manual": "Escribir manualmente",
-      "manualHint": "Tú escribes el mensaje",
+      "manualHint": "Tú escribes la descripción",
       "ai": "Generar con IA ✨",
-      "aiHint": "Claude lee el diff",
+      "aiHint": "Claude lee los cambios del código",
       "aiAnalyzing": "Verificando cambios...",
-      "aiAnalyzingHint": "Claude está generando el mensaje de commit basado en el diff",
+      "aiAnalyzingHint": "Claude está generando la descripción basada en los cambios",
       "aiGenerated": "Generado por Claude",
       "regenerate": "Generar de nuevo",
       "changeMode": "Cambiar modo"
