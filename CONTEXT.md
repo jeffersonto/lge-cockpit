@@ -11,6 +11,7 @@ One of the four sequential AI-powered phases executed per task: **planning → b
 - Each phase has a canonical artifact filename (planning → `plan.md`, builder → `builder.md`, review → `review.md`, guardian → `guardian.md`), a default model (planning → opus, builder → haiku, review → sonnet, guardian → opus), a permission mode (planning → `plan`; the others → skip-permissions), and a prompt template.
 - Planning is special: it runs under `--permission-mode plan` (read-only), does **not** receive the `ARTIFACT_LOCATION_RULES` block in its prompt, and its artifact is retrieved from `~/.claude/plans/` (currently by a 5-minute mtime heuristic — known race, to be fixed in the PhaseRunner work, not in Phase).
 - Phases are serialized at the planning stage: only one planning phase runs at a time; others queue with `"queued"` status.
+- **pt-BR labels (2026-07-06 decision):** Planning → "Planejamento", Builder → "Construção", Review → "Revisão", Guardian → "Guardião". Previously all four were left untranslated (English) in `pt-BR.json`/`es.json`, violating `i18n-parity.md`. "Revisão" is reserved for this phase specifically — see [[Task Review Request]] for why the PR/approval step is named "Aprovação" instead, to avoid collision.
 
 ### Phase module (deepened)
 
@@ -63,6 +64,32 @@ Generics (not `&dyn`) so native `async fn` in traits works without the `async_tr
 PhaseRunner owns artifact **retrieval** (decided during the `Phase` grilling — `Phase` is pure and stops at the contract). For builder/review/guardian it reads `docs/tasks/{code}/{filename}` from disk; for planning it calls the existing `resolve_plan_file` (the 5-minute mtime scan of `~/.claude/plans/`). The race (two plannings within 5 min → wrong plan on wrong task) is **pre-existing and explicitly out of scope for C01** — marked TODO to fix once `claude --permission-mode plan`'s support for `--output-format json` is confirmed (plan would come back in stdout, killing the scan).
 
 ---
+
+## Task Workspace
+
+The git branch created per task (`task.git_branch`), surfaced to non-technical users as **"Área de Trabalho"** (English/Spanish glossary: "Task Workspace" / "Espacio de Trabajo"); the action that creates it is labeled **"Criar Área de Trabalho"** (was "Criar Branch"). The badge still displays the raw branch name (e.g. `feature/oauth2-login`) — only the surrounding label changes, not the value. This is a **2026-07-07 reversal** of the original ADR 002 mapping (superseded by ADR 003), which had assigned "Área de Trabalho" to the worktree instead — see [[Task Isolated Environment]] for the other half of the swap.
+
+_Avoid_ (in user-facing copy only): Branch, Git Branch, Registro de Trabalho (retired 2026-07-07).
+
+## Task Isolated Environment
+
+The folder + isolated git working tree where a task's code changes live during development (backed internally by `WorktreeProvisioner` / `task.worktree_path`). Surfaced to non-technical users in the UI as **"Ambiente Isolado"** (English/Spanish glossary: "Isolated Environment" / "Entorno Aislado") — the rename is UI copy only, no change to the underlying data model or Rust-side naming (`worktree` stays the term in code, migrations, and `CONTEXT.md`'s `PhaseRunner` section above). Formerly labeled "Área de Trabalho" under ADR 002 (superseded); see [[Task Workspace]] above for the other half of the 2026-07-07 swap.
+
+_Avoid_ (in user-facing copy only): Worktree, workspace folder.
+
+## Task Review Request
+
+The GitHub Pull Request opened once a task's LGE pipeline (Guardian) completes, surfaced to non-technical users as **"Aprovação"**: panel title "Pronto para Aprovação", action button "Enviar para Aprovação", and the single text field it collects — the same text used for both the git commit and the context handed to the reviewer — labeled "Descrição da Aprovação" (was "Mensagem de commit"). The underlying artifact is still a real GitHub Pull Request; "Pull Request"/"PR" stays untranslated in dev-facing surfaces only (the manual-fallback terminal command, code, anywhere a developer cross-references GitHub directly), since GitHub itself uses that vocabulary and the developer needs the two to match.
+
+Named "Aprovação" rather than "Revisão" specifically to avoid colliding with the LGE **Review** phase (see below), which independently translates to "Revisão" — the two are different moments (AI self-check mid-pipeline vs. asking a human to approve the final result) and must not share a label.
+
+_Avoid_ (in non-technical-facing copy only): Pull Request, PR, commit, push, diff, Revisão (reserved for the LGE phase).
+
+## Task Development (non-technical UI label for "LGE Process")
+
+The end-to-end run of the four LGE phases for a task, surfaced to non-technical users as **"Desenvolvimento"** ("Iniciar Desenvolvimento", "Desenvolvimento concluído!", "Nenhum desenvolvimento em andamento") — replacing "Processo LGE" in functional, action-oriented copy. "LGE"/"LGE Cockpit" is kept only as the product's brand name (app title, health-check screen), never in day-to-day task copy.
+
+_Avoid_ (in non-technical-facing copy only): Processo LGE, LGE process.
 
 ## Jira Integration
 

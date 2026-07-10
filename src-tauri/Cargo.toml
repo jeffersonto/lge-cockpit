@@ -1,6 +1,6 @@
 [package]
 name = "lge-cockpit"
-version = "0.8.0"
+version = "0.9.0"
 description = "LGE Development Cockpit"
 authors = ["you"]
 license = "MIT"

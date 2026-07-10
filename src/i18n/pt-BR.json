@@ -8,7 +8,7 @@
     "noRepos": "Nenhum repositório adicionado"
   },
   "topbar": {
-    "noProcesses": "Nenhum processo LGE ativo"
+    "noProcesses": "Nenhum Desenvolvimento em andamento"
   },
   "tasks": {
     "title": "Tarefas",
@@ -18,10 +18,10 @@
     "emptyHint": "Crie uma nova tarefa ou importe do Jira",
     "deleteConfirm": "Tem certeza que deseja excluir esta tarefa?",
     "deleteTitle": "Excluir tarefa?",
-    "deleteWarningWorktree": "O worktree ativo será removido do disco.",
-    "deleteWarningBranch": "A branch \"{{branch}}\" será deletada.",
+    "deleteWarningWorktree": "O Ambiente Isolado ativo será removido do disco.",
+    "deleteWarningBranch": "A Área de Trabalho \"{{branch}}\" será removida.",
     "deletionPartialError": "Tarefa excluída, mas alguns recursos não puderam ser removidos:",
-    "deleteDisabledRunning": "Cancele a fase LGE em execução antes de excluir",
+    "deleteDisabledRunning": "Cancele a etapa de Desenvolvimento em execução antes de excluir",
     "filter": {
       "placeholder": "Buscar por título ou chave Jira...",
       "noResults": "Nenhuma tarefa corresponde ao filtro"
@@ -60,7 +60,7 @@
     "sourceManual": "Manual",
     "sourceJira": "Jira",
     "changeStatus": "Alterar status",
-    "startLge": "Iniciar Processo LGE",
+    "startLge": "Iniciar Desenvolvimento",
     "createdAt": "Criado em",
     "updatedAt": "Atualizado em",
     "openInJira": "Abrir no Jira",
@@ -85,13 +85,13 @@
     "verifying": "Verificando"
   },
   "lge": {
-    "title": "Processo LGE",
-    "processComplete": "Processo LGE concluído!",
+    "title": "Desenvolvimento",
+    "processComplete": "Desenvolvimento concluído!",
     "phase": {
-      "planning": "Planning",
-      "builder": "Builder",
-      "review": "Review",
-      "guardian": "Guardian"
+      "planning": "Planejamento",
+      "builder": "Construção",
+      "review": "Revisão",
+      "guardian": "Guardião"
     },
     "status": {
       "pending": "Aguardando",
@@ -131,11 +131,11 @@
         "riskScore": "Risco",
         "fileTree": "Árvore de Alterações",
         "expandAll": "Expandir tudo",
-        "collapseAll": "Colapsar tudo",
-        "depGraph": "Grafo de Dependências",
-        "depGraphEmpty": "Nenhuma alteração de dependências detectada",
-        "apiSurface": "Superfície de API",
-        "apiSurfaceEmpty": "Nenhuma alteração de API pública detectada",
+        "collapseAll": "Recolher tudo",
+        "depGraph": "Mapa de Conexões",
+        "depGraphEmpty": "Nenhuma conexão entre partes do sistema foi alterada",
+        "apiSurface": "Pontos de Contato Externo",
+        "apiSurfaceEmpty": "Nenhum ponto de contato externo foi alterado",
         "timeline": "Comparação entre Fases",
         "timelineEmpty": "Execute mais fases para comparar",
         "added": "adicionado",
@@ -145,12 +145,12 @@
         "riskMedium": "Médio",
         "riskHigh": "Alto",
         "riskCritical": "Crítico",
-        "analyzeBtn": "Analisar Impacto Arquitetural",
+        "analyzeBtn": "Analisar Impacto no Sistema",
         "analyzing": "Analisando...",
         "reanalyze": "Reanalisar",
-        "emptyTitle": "Análise de Impacto Arquitetural",
-        "emptyDesc": "Veja quais módulos foram afetados, novas dependências introduzidas e o raio de impacto desta fase.",
-        "emptyHint": "Rápido · Offline · Baseado em git diff"
+        "emptyTitle": "Análise de Impacto no Sistema",
+        "emptyDesc": "Veja quais partes do sistema foram afetadas, novas conexões criadas e o tamanho do impacto desta fase.",
+        "emptyHint": "Rápido · Offline · Baseado no código alterado"
       }
     },
     "context": {
@@ -161,50 +161,50 @@
   },
   "git": {
     "commit": {
-      "messageLabel": "Mensagem de commit",
+      "messageLabel": "Descrição da Aprovação",
       "manual": "Escrever manualmente",
-      "manualHint": "Você escreve a mensagem",
+      "manualHint": "Você escreve a descrição",
       "ai": "Gerar com IA ✨",
-      "aiHint": "Claude lê o diff",
+      "aiHint": "Claude lê as alterações do código",
       "aiAnalyzing": "Verificando modificações...",
-      "aiAnalyzingHint": "Claude está gerando a mensagem de commit com base no diff",
+      "aiAnalyzingHint": "Claude está gerando a descrição com base nas alterações",
       "aiGenerated": "Gerado pelo Claude",
       "regenerate": "Gerar novamente",
       "changeMode": "Trocar modo"
     },
     "branch": {
-      "title": "Branch Git",
-      "create": "Criar Branch",
-      "dialogTitle": "Criar Branch Git",
-      "nameLabel": "Nome da branch",
-      "baseLabel": "Branch base",
-      "baseHint": "A branch base será atualizada com pull antes de criar a nova branch. Padrão: develop.",
+      "title": "Área de Trabalho",
+      "create": "Criar Área de Trabalho",
+      "dialogTitle": "Criar Área de Trabalho",
+      "nameLabel": "Nome da Área de Trabalho",
+      "baseLabel": "Ponto de partida",
+      "baseHint": "Vamos atualizar com a versão mais recente do projeto antes de criar sua Área de Trabalho. Padrão: develop.",
       "creating": "Criando...",
-      "confirm": "Criar Branch"
+      "confirm": "Criar Área de Trabalho"
     },
     "worktree": {
-      "active": "Worktree ativo",
-      "remove": "Remover worktree",
+      "active": "Ambiente Isolado",
+      "remove": "Remover Ambiente Isolado",
       "openInIde": "Abrir no VS Code",
       "copyPath": "Copiar caminho",
       "copied": "Copiado!",
-      "cleanCompleted": "Limpar worktrees concluídas",
+      "cleanCompleted": "Limpar Ambientes Isolados de tarefas concluídas",
       "cleanAll": "Limpar tudo",
       "cleaning": "Limpando...",
-      "cleaned": "Worktree removido com sucesso",
-      "cleanupAfterPr": "Limpar worktree",
-      "limitReached": "Limite de worktrees atingido",
-      "staleAlert": "Você tem {{count}} worktree(s) de tarefas concluídas há mais de 7 dias"
+      "cleaned": "Ambiente Isolado removido com sucesso",
+      "cleanupAfterPr": "Limpar Ambiente Isolado",
+      "limitReached": "Limite de Ambientes Isolados atingido",
+      "staleAlert": "Você tem {{count}} Ambiente(s) Isolado(s) de tarefas concluídas há mais de 7 dias"
     },
     "pr": {
-      "panelTitle": "Pronto para Pull Request",
+      "panelTitle": "Pronto para Aprovação",
       "titleLabel": "Título do PR",
       "titlePlaceholder": "Descreva as mudanças...",
       "bodyLabel": "Descrição do PR",
       "bodyPlaceholder": "Resumo do que foi implementado...",
-      "commitAndOpen": "Commit, Push & Abrir PR",
+      "commitAndOpen": "Enviar para Aprovação",
       "loading": "Processando...",
-      "success": "Pull request criado com sucesso!",
+      "success": "Aprovação enviada com sucesso!",
       "manualHint": "Execute manualmente no terminal:",
       "copyCommand": "Copiar comando",
       "copied": "Copiado!"
@@ -219,11 +219,11 @@
     },
     "models": {
       "title": "Modelo por Fase",
-      "description": "Escolha qual modelo Claude será usado em cada fase do processo LGE.",
-      "planning": "Planning",
-      "builder": "Builder",
-      "review": "Review",
-      "guardian": "Guardian",
+      "description": "Escolha qual modelo de IA será usado em cada etapa do Desenvolvimento.",
+      "planning": "Planejamento",
+      "builder": "Construção",
+      "review": "Revisão",
+      "guardian": "Guardião",
       "opus": "Opus",
       "sonnet": "Sonnet",
       "haiku": "Haiku",
@@ -235,7 +235,7 @@
     "saved": "Configurações salvas!",
     "shellEnv": {
       "title": "Ambiente Shell",
-      "description": "Comandos executados antes de cada operação do Cockpit (git, Claude CLI, etc). Um comando por linha. Linhas com # são ignoradas.",
+      "description": "Comandos executados antes de cada operação do Cockpit (git, Claude CLI, etc). Um comando por linha. Linhas com # são ignoradas.\n\nSe o seu projeto precisa de versões específicas de ferramentas para rodar, cole os comandos aqui. Se não souber o que isso significa, pode deixar em branco ou pedir ajuda a quem configurou o projeto.",
       "placeholder": "# Exemplo:\nunset GOROOT\nnvm use 18\npyenv shell 3.11"
     },
     "jira": {
@@ -245,9 +245,9 @@
       "baseUrlPlaceholder": "https://suaempresa.atlassian.net",
       "email": "Email",
       "emailPlaceholder": "voce@suaempresa.com",
-      "apiToken": "Token de API",
-      "apiTokenPlaceholder": "Gere um nas configurações da conta Atlassian → Segurança → Criar e gerenciar tokens de API",
-      "apiTokenHint": "Crie um token de API na sua conta Atlassian → Segurança → Tokens de API.",
+      "apiToken": "Chave de Acesso",
+      "apiTokenPlaceholder": "Gere uma nas configurações da conta Atlassian → Segurança → Criar e gerenciar tokens de API",
+      "apiTokenHint": "Crie uma Chave de Acesso na sua conta Atlassian → Segurança → Tokens de API.",
       "testConnection": "Testar conexão",
       "testing": "Testando..."
     }
@@ -258,6 +258,12 @@
     "close": "Fechar",
     "latest": "Atual",
     "releases": {
+      "v090": {
+        "title": "v0.9.0 — Linguagem Simplificada",
+        "f1": "Termos técnicos como branch, worktree e pull request viraram Área de Trabalho, Ambiente Isolado e Aprovação nas telas de uso diário",
+        "f2": "Painel de Diff de Arquitetura com linguagem acessível: Mapa de Conexões e Pontos de Contato Externo substituem Dependency Graph e API Surface",
+        "f3": "Configurações Jira e Ambiente com explicações em linguagem simples; token de API agora é Chave de Acesso"
+      },
       "v080": {
         "title": "v0.8.0 — API direta do Jira",
         "f1": "Importação do Jira agora usa a API REST da Atlassian diretamente — sem MCP nem Claude CLI",
@@ -357,6 +363,6 @@
   },
   "repos": {
     "deleteTitle": "Remover repositório?",
-    "deleteStats": "{{tasks}} tarefa(s) · {{worktrees}} worktree(s) · {{branches}} branch(es) serão removidos."
+    "deleteStats": "{{tasks}} tarefa(s) · {{worktrees}} Ambiente(s) Isolado(s) · {{branches}} Área(s) de Trabalho serão removidas."
   }
 }
